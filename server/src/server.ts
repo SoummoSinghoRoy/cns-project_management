@@ -5,7 +5,7 @@ const port: number = 8080;
 import db from './config/db.config';
 
 db.sequelize.sync().then(() => {
-  console.log('Connection has been established successfully.');
+  console.log('Database sync.....');
   app.listen(port, () => {
     console.log(`Server is running successfully on port: ${port}`);
   })
