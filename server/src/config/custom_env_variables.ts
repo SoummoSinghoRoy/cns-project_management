@@ -9,7 +9,6 @@ const env_variables: EnvVariables = {
   db_password: process.env.DB_Password || '',
   db_host: process.env.DB_Host || 'localhost',
   db_port: process.env.DB_Port || 3306,
-  db_dialect: process.env.Dialect || 'mysql2',
   secret_key: process.env.SECRET_KEY || 'Secret-Key-001' 
 }
 
