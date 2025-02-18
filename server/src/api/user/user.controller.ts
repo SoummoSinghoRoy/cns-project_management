@@ -59,7 +59,7 @@ class UserController {
         statusCode: 500,
         message: 'Internal server error | get back soon',
       };
-      res.status(500).json(response);
+      res.json(response);
     }
   };
 
@@ -79,7 +79,7 @@ class UserController {
         };
         res.status(400).json(validationresult);
       } else {
-        const validUser = await this.database.user.findOne({username});
+        const validUser = await this.database.user.findOne({where: {username}});
 
         if(validUser) {
           const match = await this.configureBcrypt.comparePassword(password, validUser.password);          
@@ -127,7 +127,7 @@ class UserController {
         statusCode: 500,
         message: 'Internal server error | get back soon',
       };
-      res.status(500).json(response);
+      res.json(response);
     }
   };
 
@@ -193,7 +193,7 @@ class UserController {
         statusCode: 500,
         message: 'Internal server error | get back soon',
       };
-      res.status(500).json(response);
+      res.json(response);
     }
   };
 
@@ -245,7 +245,7 @@ class UserController {
         statusCode: 500,
         message: 'Internal server error | get back soon',
       };
-      res.status(500).json(response);
+      res.json(response);
     }
   };
 }

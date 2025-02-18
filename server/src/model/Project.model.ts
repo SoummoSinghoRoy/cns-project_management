@@ -25,13 +25,14 @@ export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
       status: {
         type: dataTypes.ENUM(...Object.values(Status)),
         allowNull: false,
+        defaultValue: '0'
       },
       startDateTime: {
-        type: dataTypes.DATE,
+        type: dataTypes.STRING,
         allowNull: false,
       },
       endDateTime: {
-        type: dataTypes.DATE,
+        type: dataTypes.STRING,
         allowNull: false,
       },
     },

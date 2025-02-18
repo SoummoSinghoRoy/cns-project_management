@@ -4,7 +4,7 @@
 2. Project: name, intro, owner(project manager/admin), status(0 | 1 | 3), startDateTime(format: yyyy-MM-dd), endDateTime(format: yyyy-MM-dd), projectMembers(max-5).
 
 
-A. Admin can create, read, edit or delete project. As well as add, update, delete employee.
+A. Admin can create, read, edit or delete project. As well as add, update, delete employee. when admin add employee must add responsibility which helps to determine this employee is coordinator or assistant.
 B. After user logged in project assistant & project manager can get all current month project in a table of home page. and user can view all project in projects all page.
 C. In home page have some cards like: current project, completed project & new assigned project.
 D. Page for Employees will be home, project(add project & all projects), user(change password, logout)

@@ -1,5 +1,6 @@
 import { Request, Response, Application, Router } from 'express';
 import userRouter from './user/user.route';
+import projectRouter from '../api/project/project.route';
 
 interface IRoute {
   path: string,
@@ -7,6 +8,10 @@ interface IRoute {
 }
 
 const routes: IRoute[] = [
+  {
+    path: '/api/v1/project',
+    handler: projectRouter
+  },
   {
     path: '/api/v1/user',
     handler: userRouter

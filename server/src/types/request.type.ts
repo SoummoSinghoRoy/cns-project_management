@@ -17,3 +17,13 @@ export interface CustomRequest extends Request {
     employeeType: string;
   } | null
 }
+
+export interface ProjectAddRequestBody {
+  name: string;
+  intro: string;
+  ownerId: string | number;
+  status: string;
+  startDateTime: string;
+  endDateTime: string;
+  teamMembers: [];
+}
