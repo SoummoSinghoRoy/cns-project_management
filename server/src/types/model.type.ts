@@ -2,6 +2,11 @@ import { CreationOptional } from "sequelize";
 
 export enum Role {
   Admin = 'admin',
+  Employee = 'employee',
+}
+
+export enum EmployeeType {
+  Admin = 'admin',
   Coordinator = 'coordinator',
   Assistant = 'assistant',
 }
@@ -11,6 +16,7 @@ export interface UserAttributes {
   username: string;
   password: string;
   role: Role;
+  employee_type: EmployeeType;
 }
 
 export enum Status {

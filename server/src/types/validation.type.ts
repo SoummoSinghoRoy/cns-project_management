@@ -1,4 +1,6 @@
+export type BaseError = string | object; 
+
 export interface ValidationResult {
-  error: string | object;
+  error: BaseError;
   isValid: boolean;
 }

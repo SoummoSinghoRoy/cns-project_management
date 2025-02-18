@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { UserAttributes, Role } from "../types/model.type";
+import { UserAttributes, Role, EmployeeType } from "../types/model.type";
 
 export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
   const User = sequelize.define<Model<UserAttributes>>('User', {
@@ -18,6 +18,10 @@ export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
     },
     role: {
       type: dataTypes.ENUM(...Object.values(Role)),
+      allowNull: false
+    },
+    employee_type: {
+      type: dataTypes.ENUM(...Object.values(EmployeeType)),
       allowNull: false
     }
   }, {
