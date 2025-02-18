@@ -225,7 +225,7 @@ class UserController {
           const response: BasicApiResponse = {
             success: false,
             statusCode: 406,
-            message: 'Error occurred | get back soon',
+            message: 'Not accepted the update',
           };
           res.status(500).json(response);
         }
