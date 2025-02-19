@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import db from "../../config/db.config";
 import { projectValidation } from "./project.validation";
-import { BasicApiResponse, ProjectApiResponse, UserApiResponse } from "../../types/response.type";
+import { BasicApiResponse, ProjectApiResponse } from "../../types/response.type";
 import { WorkStatus, Status } from "../../types/model.type";
 
 class ProjectController {
@@ -247,6 +247,39 @@ class ProjectController {
           message: 'Project not valid',
         };
         res.json(validationresult);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  };
+
+  projectRetrieveController = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const allProject = await this.database.project.findAll({
+        include: ["owner", "teamMembers"]
+      })
+      
+      if(allProject.length !== 0) {
+        const response: ProjectApiResponse = {
+          success: true,
+          statusCode: 200,
+          message: 'Project retrieve successfully',
+          data: allProject
+        };
+      res.json(response);
+      } else {
+        const response: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Project not found',
+        };
+      res.json(response);
       }
     } catch (error) {
       console.log(error);

@@ -8,5 +8,6 @@ router.post('/add', isAuthenticated, isCoordinator, projectController.projectAdd
 router.patch('/edit/:projectId', isAuthenticated, isCoordinator, projectController.projectUpdateController);
 router.patch('/update/status/:projectId', isAuthenticated, isCoordinator, projectController.projectStatusUpdateController);
 router.delete('/delete/:projectId', isAuthenticated, isCoordinator, projectController.projectDeleteController);
+router.get('/all', isAuthenticated, projectController.projectRetrieveController);
 
 export default router;
