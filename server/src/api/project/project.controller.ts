@@ -262,7 +262,8 @@ class ProjectController {
   projectRetrieveController = async (req: Request, res: Response): Promise<void> => {
     try {
       const allProject = await this.database.project.findAll({
-        include: ["owner", "teamMembers"]
+        include: ["owner", "teamMembers"],
+        order: [["createdAt", "DESC"]] 
       })
       
       if(allProject.length !== 0) {
@@ -294,4 +295,12 @@ class ProjectController {
 }
 
 export const projectController = new ProjectController(db, projectValidation);
+
+// pdf generate
+// 1. write a query based on range of from & to.
+// 2. then generate pdf.
+
+// recent project api.
+// always return current month.
+
 
