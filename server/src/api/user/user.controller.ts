@@ -5,6 +5,8 @@ import { userValidation } from "./user.validation";
 import { bcryptConfig } from "../../config/bcrypt.config";
 import { jwt_token } from "../../config/jwt.config";
 import { CustomRequest } from "../../types/request.type";
+import { EmployeeStatus, EmployeeType, Role, Status } from "../../types/model.type";
+import { Op } from "sequelize";
 
 class UserController {
   private database: typeof db;
@@ -33,11 +35,11 @@ class UserController {
             message: validationResult.error,
           },
         };
-        res.status(400).json(validationresult);
+        res.json(validationresult);
       } else {
         const hash = await this.configureBcrypt.generatePassword(password)
         const registerUser = await this.database.user.create({
-          username, password: hash, role: 'admin', employee_type: 'admin'
+          username, password: hash, role: Role.Admin, employee_type: EmployeeType.Admin, employee_status: EmployeeStatus.Admin
         });
         const response: UserApiResponse = {
           success: true,
@@ -47,7 +49,8 @@ class UserController {
             id: registerUser.id,
             username: registerUser.username,
             role: registerUser.role,
-            employeeType: registerUser.employee_type
+            employeeType: registerUser.employee_type,
+            employeeStatus: registerUser.employee_status
           }
         }
         res.json(response);
@@ -77,14 +80,15 @@ class UserController {
             message: validationResult.error,
           },
         };
-        res.status(400).json(validationresult);
+        res.json(validationresult);
       } else {
         const validUser = await this.database.user.findOne({where: {username}});
 
         if(validUser) {
           const match = await this.configureBcrypt.comparePassword(password, validUser.password);          
           if(match) {
-            const jwtResult = this.jwtToken.jwtSign({id: validUser.id, username: validUser.username, role: validUser.role, employeeType: validUser.employee_type});
+            const jwtResult = this.jwtToken.jwtSign({id: validUser.id, username: validUser.username, role: validUser.role, employeeType: validUser.employee_type, employeeStatus: validUser.employee_status});
+
             if(jwtResult.statusCode === 200) {
               const response: UserApiResponse = {
                 success: true,
@@ -104,20 +108,20 @@ class UserController {
               res.json(response);
             }
           } else {
-            const validationresult: BasicApiResponse = {
+            const response: BasicApiResponse = {
               success: false,
               statusCode: 401,
               message: 'Incorrect password',
             }
-            res.json(validationresult)
+            res.json(response)
           }
         } else {
-          const validationresult: BasicApiResponse = {
+          const response: BasicApiResponse = {
             success: false,
             statusCode: 404,
             message: 'User not found',
           }
-          res.json(validationresult)
+          res.json(response)
         }
       }
     } catch (error) {
@@ -155,8 +159,8 @@ class UserController {
 
   employeeAddPostController = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { username, password, employee_type } = req.body;
-      const validationResult = await this.reqValidation.employeeAddValidation({ username, password, employee_type });
+      const { username, password, employee_type, employee_status } = req.body;
+      const validationResult = await this.reqValidation.employeeAddValidation({ username, password, employee_type, employee_status });
 
       if (!validationResult.isValid) {
         const validationresult: BasicApiResponse = {
@@ -167,11 +171,11 @@ class UserController {
             message: validationResult.error,
           },
         };
-        res.status(400).json(validationresult);
+        res.json(validationresult);
       } else {
         const hash = await this.configureBcrypt.generatePassword(password)
         const registerUser = await this.database.user.create({
-          username, password: hash, role: 'employee', employee_type
+          username, password: hash, role: Role.Employee, employee_type, employee_status
         });
         const response: UserApiResponse = {
           success: true,
@@ -181,7 +185,8 @@ class UserController {
             id: registerUser.id,
             username: registerUser.username,
             role: registerUser.role,
-            employeeType: registerUser.employee_type
+            employeeType: registerUser.employee_type,
+            employeeStatus: registerUser.employee_status
           }
         }
         res.json(response);
@@ -227,17 +232,55 @@ class UserController {
             statusCode: 406,
             message: 'Not accepted the update',
           };
-          res.status(500).json(response);
+          res.json(response);
         }
       } else {
-        const validationresult: BasicApiResponse = {
+        const response: BasicApiResponse = {
           success: false,
           statusCode: 404,
           message: 'Employee not found',
         }
-        res.json(validationresult)
+        res.json(response)
       }
       
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  };
+
+  availableTeamMembers = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const availableMembers = await this.database.user.findAll({
+        where: {
+          [Op.and]: [
+            { employee_type: EmployeeType.Assistant }, 
+            { employee_status: EmployeeStatus.Available }
+          ]
+        },
+      });
+  
+      if (availableMembers.length > 0) {
+        const response: UserApiResponse = {
+          success: true,
+          statusCode: 200,
+          message: 'Found available members',
+          data: availableMembers,
+        };
+        res.json(response);
+      } else {
+        const response: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Members not found',
+        };
+        res.json(response);
+      }
     } catch (error) {
       console.log(error);
       const response: BasicApiResponse = {

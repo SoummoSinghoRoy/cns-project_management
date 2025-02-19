@@ -15,7 +15,8 @@ export const isAuthenticated = (req: Request, res: Response, next: NextFunction)
         id: verificationresult.decoded.id,
         username: verificationresult.decoded.username,
         role: verificationresult.decoded.role,
-        employeeType: verificationresult.decoded.employeeType
+        employeeType: verificationresult.decoded.employeeType,
+        employeeStatus: verificationresult.decoded.employeeStatus
       }
       next()
     } else {

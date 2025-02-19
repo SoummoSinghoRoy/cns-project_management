@@ -16,13 +16,6 @@ sequelize.authenticate()
             console.log(`Unable to connect to the database: ${err}`);
           })
 
-// interface DB {
-//   Sequelize: typeof Sequelize;
-//   sequelize: Sequelize;
-//   user: typeof Model<UserAttributes, UserAttributes>;
-//   project: typeof Model<ProjectAttributes, ProjectAttributes>
-// }
-
 let db: any = {}
 
 db.Sequelize = Sequelize;
@@ -41,7 +34,8 @@ db.project.belongsToMany(db.user, {
 db.user.belongsToMany(db.project, {
   through: "ProjectTeamMembers",
   as: "projects",
-  foreignKey: "userId",
+  foreignKey: "employeeId",
 });
+
 
 export default db;

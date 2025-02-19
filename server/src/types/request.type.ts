@@ -7,6 +7,7 @@ export interface UserRequestBody {
 
 export interface EmployeeAddRequestBody extends UserRequestBody {
   employee_type: string;
+  employee_status: string;
 }
 
 export interface CustomRequest extends Request {
@@ -15,6 +16,7 @@ export interface CustomRequest extends Request {
     username: string;
     role: string;
     employeeType: string;
+    employeeStatus: string;
   } | null
 }
 

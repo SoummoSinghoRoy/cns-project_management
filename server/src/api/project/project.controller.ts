@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import db from "../../config/db.config";
 import { projectValidation } from "./project.validation";
-import { BasicApiResponse } from "../../types/response.type";
+import { BasicApiResponse, ProjectApiResponse } from "../../types/response.type";
 
 class ProjectController {
   private database: typeof db;
@@ -26,20 +26,36 @@ class ProjectController {
             message: validationResult.error,
           },
         };
-        res.status(400).json(validationresult);
+        res.json(validationresult);
       } else {
-        const existingProjectOwner = await this.database.project.findOne({where: {ownerId}});
-
-        if(!existingProjectOwner) {
-          console.log(`Everything all right`);
-        } else {
-          const response: BasicApiResponse = {
-            success: false,
-            statusCode: 406,
-            message: `Already engaged owner`,
-          };
-          res.json(response);
+        const project = await this.database.project.create({
+          name,
+          intro,
+          ownerId,
+          status,
+          startDateTime,
+          endDateTime,
+        });
+    
+        if (Array.isArray(teamMembers) && teamMembers.length > 0) {
+          await project.addTeamMembers(teamMembers);
         }
+
+        const projectdata = await this.database.project.findOne({
+          where: { id: project.id },
+          include: [
+            { association: "owner" },
+            { association: "teamMembers" },
+          ],
+        });
+
+        const response: ProjectApiResponse = {
+          success: true,
+          statusCode: 200,
+          message: `Project succesfully added`,
+          project: projectdata
+        }
+        res.json(response);
       }
     } catch (error) {
       console.log(error);

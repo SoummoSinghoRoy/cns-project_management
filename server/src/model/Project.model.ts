@@ -1,8 +1,8 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { ProjectColumnAttributes, Status } from "../types/model.type";
+import { ProjectAttributes, Status } from "../types/model.type";
 
 export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
-  const Project = sequelize.define<Model<ProjectColumnAttributes>>(
+  const Project = sequelize.define<Model<ProjectAttributes>>(
     "Project",
     {
       id: {
@@ -25,7 +25,7 @@ export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
       status: {
         type: dataTypes.ENUM(...Object.values(Status)),
         allowNull: false,
-        defaultValue: '0'
+        defaultValue: Status.Pre
       },
       startDateTime: {
         type: dataTypes.STRING,

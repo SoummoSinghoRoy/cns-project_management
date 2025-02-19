@@ -4,6 +4,6 @@ import { isAuthenticated, isCoordinator } from "../../middleware/checkAuthentica
 import { projectController } from "./project.controller";
 
 
-router.post('/add', isAuthenticated, isCoordinator, projectController.projectAddPostController)
+router.post('/add', isAuthenticated, isCoordinator, projectController.projectAddPostController);
 
 export default router;

@@ -11,12 +11,19 @@ export enum EmployeeType {
   Assistant = 'assistant',
 }
 
+export enum EmployeeStatus {
+  Admin = 'admin',
+  Engaged = 'engaged',
+  Available = 'available'
+}
+
 export interface UserAttributes {
   id: CreationOptional<number>;
   username: string;
   password: string;
   role: Role;
   employee_type: EmployeeType;
+  employee_status: EmployeeStatus;
 }
 
 export enum Status {
@@ -25,7 +32,7 @@ export enum Status {
   End = '3',
 }
 
-export interface ProjectColumnAttributes {
+export interface ProjectAttributes {
   id: CreationOptional<number>;
   name: string;
   intro: string;
@@ -35,7 +42,7 @@ export interface ProjectColumnAttributes {
   endDateTime: Date | string; 
 }
 
-export interface ProjectAttributes extends ProjectColumnAttributes {
-  owner: UserAttributes;        
-  teamMembers: UserAttributes[];    
+export interface ProjectTeamMembersAttributes {
+  projectId: number;
+  employeeId: number;
 }

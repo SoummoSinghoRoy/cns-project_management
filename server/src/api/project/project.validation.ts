@@ -37,6 +37,8 @@ class ProjectValidation {
 
     if(!Array.isArray(reqField.teamMembers) || reqField.teamMembers.length === 0) {
       this.errorResult.teamMembers = `Atleast select one member`
+    } else if(reqField.teamMembers.length > 5) {
+      this.errorResult.teamMembers = `Max 5 members applicable`
     }
 
     return this.errorResult
