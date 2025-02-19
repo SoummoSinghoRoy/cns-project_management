@@ -7,7 +7,7 @@ export interface UserRequestBody {
 
 export interface EmployeeAddRequestBody extends UserRequestBody {
   employee_type: string;
-  employee_status: string;
+  work_status: string;
 }
 
 export interface CustomRequest extends Request {
@@ -16,19 +16,21 @@ export interface CustomRequest extends Request {
     username: string;
     role: string;
     employeeType: string;
-    employeeStatus: string;
+    workStatus: string;
   } | null
 }
 
 export interface ProjectRequestBody {
   name: string;
   intro: string;
-  status: string;
   startDateTime: string;
   endDateTime: string;
 }
 
 export interface ProjectAddRequestBody extends ProjectRequestBody {
   ownerId: string | number;
+  status: string;
   teamMembers: [];
 }
+
+export type ProjectUpdateRequestBody = Pick<ProjectAddRequestBody, 'status'>;

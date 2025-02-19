@@ -69,8 +69,8 @@ class UserValidation {
       this.errorResult.employee_type = `Employee must be coordinator or assistant`
     }
 
-    if(!reqField.employee_status) {
-      this.errorResult.employee_status = `Employee status must be available or engaged`
+    if(!reqField.work_status) {
+      this.errorResult.work_status = `Work status must be available or engaged`
     }
 
     return {

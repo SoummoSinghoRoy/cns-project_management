@@ -26,7 +26,7 @@ export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
     },
     {
       freezeTableName: true,
-      timestamps: false,
+      timestamps: true,
     }
   );
 

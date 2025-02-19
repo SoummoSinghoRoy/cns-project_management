@@ -1,5 +1,5 @@
 import db from "../../config/db.config";
-import { ProjectAddRequestBody, ProjectRequestBody } from "../../types/request.type";
+import { ProjectAddRequestBody, ProjectRequestBody, ProjectUpdateRequestBody } from "../../types/request.type";
 import { BaseError, ValidationResult } from "../../types/validation.type";
 
 class ProjectValidation {
@@ -10,17 +10,14 @@ class ProjectValidation {
     this.database = database;
   }
 
-  private baseValidation(reqField: ProjectRequestBody): BaseError {
+  async projectAddValidation(reqField: ProjectAddRequestBody): Promise<ValidationResult> {
+
     if(!reqField.name) {
       this.errorResult.name = `Project name required`
     }
 
     if(!reqField.intro) {
       this.errorResult.intro = `Intro is required`
-    }
-
-    if(!reqField.status) {
-      this.errorResult.status = `Status is required`
     }
 
     if(!reqField.startDateTime) {
@@ -31,55 +28,62 @@ class ProjectValidation {
       this.errorResult.endDateTime = `End date is required`
     }
 
-    return this.errorResult
-  };
+    if(!reqField.ownerId) {
+      this.errorResult.owner = `Owner is required`
+    }
 
-  async projectAddValidation(reqField: ProjectAddRequestBody): Promise<ValidationResult> {
-    const validationresult = this.baseValidation(reqField);
+    if(!reqField.status) {
+      this.errorResult.status = `Status is required`
+    }
 
-    if(Object.keys(validationresult).length !== 0) {
-      this.errorResult = {};
-      return {
-        error: validationresult,
-        isValid: Object.keys(validationresult).length === 0
-      }
-    } else {
-      if(!reqField.ownerId) {
-        this.errorResult.owner = `Owner is required`
-      }
-      
-      if(!Array.isArray(reqField.teamMembers) || reqField.teamMembers.length === 0) {
-        this.errorResult.teamMembers = `Atleast select one member`
-      } else if(reqField.teamMembers.length > 5) {
-        this.errorResult.teamMembers = `Max 5 members applicable`
-      }
+    if(!Array.isArray(reqField.teamMembers) || reqField.teamMembers.length === 0) {
+      this.errorResult.teamMembers = `Atleast select one member`
+    } else if(reqField.teamMembers.length > 5) {
+      this.errorResult.teamMembers = `Max 5 members applicable`
+    }
 
-      const existProject = await this.database.project.findOne({where: {name: reqField.name}})
-      if(existProject) {
-        this.errorResult.name = `Project already exist`
-      }
+    const existProject = await this.database.project.findOne({where: {name: reqField.name}})
+    if(existProject) {
+      this.errorResult.name = `Project already exist`
+    }
 
-      return {
-        error: this.errorResult,
-        isValid: Object.keys(this.errorResult).length === 0
-      }
+    return {
+      error: this.errorResult,
+      isValid: Object.keys(this.errorResult).length === 0
     }
   };
 
   projectUpdateValidation(reqField: ProjectRequestBody): ValidationResult {
-    const validationresult = this.baseValidation(reqField);
 
-    if(Object.keys(validationresult).length !== 0) {
-      this.errorResult = {};
-      return {
-        error: validationresult,
-        isValid: Object.keys(validationresult).length === 0
-      }
-    } else {
-      return {
-        error: this.errorResult,
-        isValid: Object.keys(this.errorResult).length === 0
-      }
+    if(!reqField.name) {
+      this.errorResult.name = `Project name required`
+    }
+
+    if(!reqField.intro) {
+      this.errorResult.intro = `Intro is required`
+    }
+
+    if(!reqField.startDateTime) {
+      this.errorResult.startDateTime = `Start date is required`
+    }
+
+    if(!reqField.endDateTime) {
+      this.errorResult.endDateTime = `End date is required`
+    }
+
+    return {
+      error: this.errorResult,
+      isValid: Object.keys(this.errorResult).length === 0
+    }
+  };
+
+  projectStatusUpdateValidation(reqField: ProjectUpdateRequestBody): ValidationResult {
+    if(!reqField.status) {
+      this.errorResult.status = `Status is required`
+    }
+    return {
+      error: this.errorResult,
+      isValid: Object.keys(this.errorResult).length === 0
     }
   }
 }

@@ -6,5 +6,7 @@ import { projectController } from "./project.controller";
 
 router.post('/add', isAuthenticated, isCoordinator, projectController.projectAddPostController);
 router.patch('/edit/:projectId', isAuthenticated, isCoordinator, projectController.projectUpdateController);
+router.patch('/update/status/:projectId', isAuthenticated, isCoordinator, projectController.projectStatusUpdateController);
+router.delete('/delete/:projectId', isAuthenticated, isCoordinator, projectController.projectDeleteController);
 
 export default router;

@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import db from "../../config/db.config";
 import { projectValidation } from "./project.validation";
-import { BasicApiResponse, ProjectApiResponse } from "../../types/response.type";
+import { BasicApiResponse, ProjectApiResponse, UserApiResponse } from "../../types/response.type";
+import { WorkStatus, Status } from "../../types/model.type";
 
 class ProjectController {
   private database: typeof db;
@@ -39,6 +40,12 @@ class ProjectController {
     
         if (Array.isArray(teamMembers) && teamMembers.length > 0) {
           await project.addTeamMembers(teamMembers);
+          teamMembers.forEach(async (memberId: any) => {
+            await this.database.user.update(
+              {work_status: WorkStatus.Engaged},
+              {where: {id: +memberId}}
+            )
+          })
         }
 
         const projectdata = await this.database.project.findOne({
@@ -75,7 +82,7 @@ class ProjectController {
       const validProject = await this.database.project.findByPk(+projectId);
 
       if(validProject) {
-        const validationResult = this.reqValidation.projectUpdateValidation({name, intro, status, startDateTime, endDateTime});
+        const validationResult = this.reqValidation.projectUpdateValidation({name, intro, startDateTime, endDateTime});
 
         if(!validationResult.isValid) {
           const validationresult: BasicApiResponse = {
@@ -89,7 +96,12 @@ class ProjectController {
           res.json(validationresult);
         } else {
           await this.database.project.update(
-            {name, intro, status, startDateTime, endDateTime},
+            {
+              name: name || validProject.name, 
+              intro: intro || validProject.intro,  
+              startDateTime: startDateTime || validProject.startDateTime, 
+              endDateTime: endDateTime || validProject.endDateTime
+            },
             {where: {id: validProject.id}}
           );
 
@@ -97,7 +109,7 @@ class ProjectController {
           const response: ProjectApiResponse = {
             success: true,
             statusCode: 200,
-            message: 'Project updated',
+            message: 'Project successfully updated',
             data: updatedProject
           }
           res.json(response);
@@ -120,7 +132,132 @@ class ProjectController {
       };
       res.json(response);
     }
-  }
+  };
+
+  projectStatusUpdateController = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { status } = req.body;
+      const { projectId } = req.params;
+      const validProject = await this.database.project.findByPk(+projectId, {
+        include: [
+          {
+            association: "teamMembers",
+          }
+        ]
+      });
+
+      if(validProject) {
+        if(status === Status.End) {
+          await this.database.project.update(
+            {status: Status.End},
+            {where: {id: validProject.id}}
+          )
+          validProject.teamMembers.forEach(async (member: any) => {
+            await this.database.user.update(
+              {work_status: WorkStatus.Available},
+              {where: {id: +member.id}}
+            )
+          })
+          const updatedWork = await this.database.project.findByPk(validProject.id)
+          const response: ProjectApiResponse = {
+            success: true,
+            statusCode: 200,
+            message: 'Project status successfully updated',
+            data: {
+              status: updatedWork.status
+            }
+          }
+          res.json(response);
+        } else {
+          const response: BasicApiResponse = {
+            success: false,
+            statusCode: 406,
+            message: 'Not accepted the update',
+          };
+          res.json(response);
+        }
+      } else {
+        const validationresult: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Project not valid',
+        };
+        res.json(validationresult);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  };
+
+  projectDeleteController = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { projectId } = req.params;
+      const validProject = await this.database.project.findByPk(+projectId, {
+        include: [
+          {
+            association: "teamMembers",
+          }
+        ]
+      });
+
+      if(validProject) {
+        await this.database.projectTeamMember.destroy(
+          {where: {projectId: +projectId}}
+        )
+        await validProject.destroy(
+          {where: {id: validProject.id}}
+        )
+        validProject.teamMembers.forEach(async (member: any) => {
+          console.log(member.id);
+          console.log(typeof member.id);
+          
+          await this.database.user.update(
+            { work_status: WorkStatus.Available },
+            { where: { id: member.id } }
+          );
+        })
+
+        const deletedProject = await this.database.project.findByPk(validProject.id)
+
+        if(!deletedProject) {
+          const validationresult: BasicApiResponse = {
+            success: true,
+            statusCode: 200,
+            message: 'Project successfully deleted'
+          };
+          res.json(validationresult);
+        } else {
+          const response: BasicApiResponse = {
+            success: false,
+            statusCode: 406,
+            message: 'Error occurred | get back soon',
+          };
+          res.json(response);
+        }
+      } else {
+        const validationresult: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Project not valid',
+        };
+        res.json(validationresult);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  };
 }
 
 export const projectController = new ProjectController(db, projectValidation);

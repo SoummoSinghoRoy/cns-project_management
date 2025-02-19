@@ -12,7 +12,7 @@ interface UserData {
   username?: string;
   role?: string;
   employeeType?: string;
-  employeeStatus?: string;
+  workStatus?: string;
 }
 
 export interface UserApiResponse extends Partial<BasicApiResponse>{
@@ -32,13 +32,13 @@ export interface AuthenticationResponse extends Partial<UserApiResponse> {}
 
 interface ProjectData {
   id?: any
-  name: string;
-  intro: string;
-  owner: UserData;
-  status: string;
-  startDateTime: string;
-  endDateTime: string;
-  teamMembers: UserData[];
+  name?: string;
+  intro?: string;
+  owner?: UserData;
+  status?: string;
+  startDateTime?: string;
+  endDateTime?: string;
+  teamMembers?: UserData[];
 }
 
 export interface ProjectApiResponse extends Partial<BasicApiResponse> {

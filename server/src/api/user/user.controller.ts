@@ -5,7 +5,7 @@ import { userValidation } from "./user.validation";
 import { bcryptConfig } from "../../config/bcrypt.config";
 import { jwt_token } from "../../config/jwt.config";
 import { CustomRequest } from "../../types/request.type";
-import { EmployeeStatus, EmployeeType, Role, Status } from "../../types/model.type";
+import { WorkStatus, EmployeeType, Role } from "../../types/model.type";
 import { Op } from "sequelize";
 
 class UserController {
@@ -39,7 +39,7 @@ class UserController {
       } else {
         const hash = await this.configureBcrypt.generatePassword(password)
         const registerUser = await this.database.user.create({
-          username, password: hash, role: Role.Admin, employee_type: EmployeeType.Admin, employee_status: EmployeeStatus.Admin
+          username, password: hash, role: Role.Admin, employee_type: EmployeeType.Admin, work_status: WorkStatus.Admin
         });
         const response: UserApiResponse = {
           success: true,
@@ -50,7 +50,7 @@ class UserController {
             username: registerUser.username,
             role: registerUser.role,
             employeeType: registerUser.employee_type,
-            employeeStatus: registerUser.employee_status
+            workStatus: registerUser.work_status
           }
         }
         res.json(response);
@@ -87,7 +87,7 @@ class UserController {
         if(validUser) {
           const match = await this.configureBcrypt.comparePassword(password, validUser.password);          
           if(match) {
-            const jwtResult = this.jwtToken.jwtSign({id: validUser.id, username: validUser.username, role: validUser.role, employeeType: validUser.employee_type, employeeStatus: validUser.employee_status});
+            const jwtResult = this.jwtToken.jwtSign({id: validUser.id, username: validUser.username, role: validUser.role, employeeType: validUser.employee_type, workStatus: validUser.work_status});
 
             if(jwtResult.statusCode === 200) {
               const response: UserApiResponse = {
@@ -159,8 +159,8 @@ class UserController {
 
   employeeAddPostController = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { username, password, employee_type, employee_status } = req.body;
-      const validationResult = await this.reqValidation.employeeAddValidation({ username, password, employee_type, employee_status });
+      const { username, password, employee_type, work_status } = req.body;
+      const validationResult = await this.reqValidation.employeeAddValidation({ username, password, employee_type, work_status });
 
       if (!validationResult.isValid) {
         const validationresult: BasicApiResponse = {
@@ -175,7 +175,7 @@ class UserController {
       } else {
         const hash = await this.configureBcrypt.generatePassword(password)
         const registerUser = await this.database.user.create({
-          username, password: hash, role: Role.Employee, employee_type, employee_status
+          username, password: hash, role: Role.Employee, employee_type, work_status
         });
         const response: UserApiResponse = {
           success: true,
@@ -186,7 +186,7 @@ class UserController {
             username: registerUser.username,
             role: registerUser.role,
             employeeType: registerUser.employee_type,
-            employeeStatus: registerUser.employee_status
+            workStatus: registerUser.work_status
           }
         }
         res.json(response);
@@ -260,7 +260,7 @@ class UserController {
         where: {
           [Op.and]: [
             { employee_type: EmployeeType.Assistant }, 
-            { employee_status: EmployeeStatus.Available }
+            { work_status: WorkStatus.Available }
           ]
         },
       });

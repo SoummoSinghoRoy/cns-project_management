@@ -11,7 +11,7 @@ export enum EmployeeType {
   Assistant = 'assistant',
 }
 
-export enum EmployeeStatus {
+export enum WorkStatus {
   Admin = 'admin',
   Engaged = 'engaged',
   Available = 'available'
@@ -23,7 +23,7 @@ export interface UserAttributes {
   password: string;
   role: Role;
   employee_type: EmployeeType;
-  employee_status: EmployeeStatus;
+  work_status: WorkStatus;
 }
 
 export enum Status {

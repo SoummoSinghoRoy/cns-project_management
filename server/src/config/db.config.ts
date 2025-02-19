@@ -1,6 +1,5 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import env_variables from "./custom_env_variables";
-// import { ProjectAttributes, UserAttributes } from "../types/model.type";
 
 const sequelize: Sequelize = new Sequelize(env_variables.db, env_variables.db_user, env_variables.db_password, {
   host: env_variables.db_host,
@@ -22,6 +21,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.user = require('../model/User.model').default(sequelize, DataTypes);
 db.project = require('../model/Project.model').default(sequelize, DataTypes);
+db.projectTeamMember = require('../model/ProjectTeamMembers.model').default(sequelize, DataTypes);
 
 db.project.belongsTo(db.user, { foreignKey: "ownerId", as: "owner" });
 
