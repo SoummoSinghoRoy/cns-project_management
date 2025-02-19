@@ -53,10 +53,64 @@ class ProjectController {
           success: true,
           statusCode: 200,
           message: `Project succesfully added`,
-          project: projectdata
+          data: projectdata
         }
         res.json(response);
       }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  };
+
+  projectUpdateController = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { name, intro, status, startDateTime, endDateTime } = req.body;
+      const { projectId } = req.params;
+      const validProject = await this.database.project.findByPk(+projectId);
+
+      if(validProject) {
+        const validationResult = this.reqValidation.projectUpdateValidation({name, intro, status, startDateTime, endDateTime});
+
+        if(!validationResult.isValid) {
+          const validationresult: BasicApiResponse = {
+            success: false,
+            statusCode: 400,
+            message: 'Validation error occurred',
+            error: {
+              message: validationResult.error,
+            },
+          };
+          res.json(validationresult);
+        } else {
+          await this.database.project.update(
+            {name, intro, status, startDateTime, endDateTime},
+            {where: {id: validProject.id}}
+          );
+
+          const updatedProject = await this.database.project.findByPk(validProject.id);
+          const response: ProjectApiResponse = {
+            success: true,
+            statusCode: 200,
+            message: 'Project updated',
+            data: updatedProject
+          }
+          res.json(response);
+        }
+      } else {
+        const validationresult: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Project not valid',
+        };
+        res.json(validationresult);
+      }
+
     } catch (error) {
       console.log(error);
       const response: BasicApiResponse = {
@@ -71,5 +125,3 @@ class ProjectController {
 
 export const projectController = new ProjectController(db, projectValidation);
 
-
-// need to query employee who isn't engaged with project as team members.

@@ -42,5 +42,5 @@ interface ProjectData {
 }
 
 export interface ProjectApiResponse extends Partial<BasicApiResponse> {
-  project: ProjectData | ProjectData[];
+  data: ProjectData | ProjectData[];
 }

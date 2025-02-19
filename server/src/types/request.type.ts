@@ -20,12 +20,15 @@ export interface CustomRequest extends Request {
   } | null
 }
 
-export interface ProjectAddRequestBody {
+export interface ProjectRequestBody {
   name: string;
   intro: string;
-  ownerId: string | number;
   status: string;
   startDateTime: string;
   endDateTime: string;
+}
+
+export interface ProjectAddRequestBody extends ProjectRequestBody {
+  ownerId: string | number;
   teamMembers: [];
 }

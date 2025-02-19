@@ -1,5 +1,5 @@
 import db from "../../config/db.config";
-import { ProjectAddRequestBody } from "../../types/request.type";
+import { ProjectAddRequestBody, ProjectRequestBody } from "../../types/request.type";
 import { BaseError, ValidationResult } from "../../types/validation.type";
 
 class ProjectValidation {
@@ -10,17 +10,13 @@ class ProjectValidation {
     this.database = database;
   }
 
-  private baseValidation(reqField: ProjectAddRequestBody): BaseError {
+  private baseValidation(reqField: ProjectRequestBody): BaseError {
     if(!reqField.name) {
       this.errorResult.name = `Project name required`
     }
 
     if(!reqField.intro) {
       this.errorResult.intro = `Intro is required`
-    }
-
-    if(!reqField.ownerId) {
-      this.errorResult.owner = `Owner is required`
     }
 
     if(!reqField.status) {
@@ -35,14 +31,8 @@ class ProjectValidation {
       this.errorResult.endDateTime = `End date is required`
     }
 
-    if(!Array.isArray(reqField.teamMembers) || reqField.teamMembers.length === 0) {
-      this.errorResult.teamMembers = `Atleast select one member`
-    } else if(reqField.teamMembers.length > 5) {
-      this.errorResult.teamMembers = `Max 5 members applicable`
-    }
-
     return this.errorResult
-  }
+  };
 
   async projectAddValidation(reqField: ProjectAddRequestBody): Promise<ValidationResult> {
     const validationresult = this.baseValidation(reqField);
@@ -54,11 +44,38 @@ class ProjectValidation {
         isValid: Object.keys(validationresult).length === 0
       }
     } else {
-      const existProject = await this.database.project.findOne({where: {name: reqField.name}})
+      if(!reqField.ownerId) {
+        this.errorResult.owner = `Owner is required`
+      }
+      
+      if(!Array.isArray(reqField.teamMembers) || reqField.teamMembers.length === 0) {
+        this.errorResult.teamMembers = `Atleast select one member`
+      } else if(reqField.teamMembers.length > 5) {
+        this.errorResult.teamMembers = `Max 5 members applicable`
+      }
 
+      const existProject = await this.database.project.findOne({where: {name: reqField.name}})
       if(existProject) {
         this.errorResult.name = `Project already exist`
       }
+
+      return {
+        error: this.errorResult,
+        isValid: Object.keys(this.errorResult).length === 0
+      }
+    }
+  };
+
+  projectUpdateValidation(reqField: ProjectRequestBody): ValidationResult {
+    const validationresult = this.baseValidation(reqField);
+
+    if(Object.keys(validationresult).length !== 0) {
+      this.errorResult = {};
+      return {
+        error: validationresult,
+        isValid: Object.keys(validationresult).length === 0
+      }
+    } else {
       return {
         error: this.errorResult,
         isValid: Object.keys(this.errorResult).length === 0
