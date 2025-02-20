@@ -661,8 +661,8 @@ class ProjectController {
           const table = {
             headers: [
               { label: "ID", width: 20, align: "center" },
-              { label: "Project Name", width: 160, align: "center" },
-              { label: "Owner", width: 80, align: "center" },
+              { label: "Project Name", width: 190, align: "center" },
+              { label: "Owner", width: 50, align: "center" },
               { label: "Status", width: 50, align: "center" },
               { label: "Start Date", width: 80, align: "center" },
               { label: "End Date", width: 80, align: "center" },
