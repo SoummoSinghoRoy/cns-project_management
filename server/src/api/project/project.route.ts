@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { isAuthenticated, isCoordinator } from "../../middleware/checkAuthenticated";
+import { isAssistant, isAuthenticated, isCoordinator } from "../../middleware/checkAuthenticated";
 import { projectController } from "./project.controller";
 
 
@@ -9,5 +9,6 @@ router.patch('/edit/:projectId', isAuthenticated, isCoordinator, projectControll
 router.patch('/update/status/:projectId', isAuthenticated, isCoordinator, projectController.projectStatusUpdateController);
 router.delete('/delete/:projectId', isAuthenticated, isCoordinator, projectController.projectDeleteController);
 router.get('/all', isAuthenticated, projectController.projectRetrieveController);
+router.get('/all/assistant/:employeeId', isAuthenticated, isAssistant, projectController.assistantProjectRetrieveController);
 
 export default router;

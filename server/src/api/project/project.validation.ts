@@ -1,6 +1,6 @@
 import db from "../../config/db.config";
 import { ProjectAddRequestBody, ProjectRequestBody, ProjectUpdateRequestBody } from "../../types/request.type";
-import { BaseError, ValidationResult } from "../../types/validation.type";
+import { ValidationResult } from "../../types/validation.type";
 
 class ProjectValidation {
   private errorResult: { [field: string]: string; } = {}
@@ -36,9 +36,11 @@ class ProjectValidation {
       this.errorResult.status = `Status is required`
     }
 
-    if(!Array.isArray(reqField.teamMembers) || reqField.teamMembers.length === 0) {
+    if(!Array.isArray(reqField.teamMembers)) {
+      this.errorResult.teamMembers = `Team members is required`
+    } else if(Array.isArray(reqField.teamMembers) && reqField.teamMembers.length === 0) {
       this.errorResult.teamMembers = `Atleast select one member`
-    } else if(reqField.teamMembers.length > 5) {
+    } else if(Array.isArray(reqField.teamMembers) && reqField.teamMembers.length > 5) {
       this.errorResult.teamMembers = `Max 5 members applicable`
     }
 

@@ -37,17 +37,13 @@ class ProjectController {
           startDateTime,
           endDateTime,
         });
-    
-        if (Array.isArray(teamMembers) && teamMembers.length > 0) {
-          await project.addTeamMembers(teamMembers);
-          teamMembers.forEach(async (memberId: any) => {
-            await this.database.user.update(
-              {work_status: WorkStatus.Engaged},
-              {where: {id: +memberId}}
-            )
-          })
-        }
-
+        await project.addTeamMembers(teamMembers);
+        teamMembers.forEach(async (memberId: any) => {
+          await this.database.user.update(
+            {work_status: WorkStatus.Engaged},
+            {where: {id: +memberId}}
+          )
+        })
         const projectdata = await this.database.project.findOne({
           where: { id: project.id },
           include: [
@@ -292,6 +288,51 @@ class ProjectController {
       res.json(response);
     }
   };
+
+  assistantProjectRetrieveController = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { employeeId } = req.params;
+      const projects = await this.database.project.findAll({
+        include: [
+          {
+              model: this.database.user,
+              as: "owner",
+              attributes: ["id", "username", "role", "employee_type"]
+          },
+          {
+              model: this.database.user,
+              as: "teamMembers",
+              where: { id: employeeId }
+          },
+        ],
+      })
+      
+      if(projects.length !== 0) {
+        const response: ProjectApiResponse = {
+          success: true,
+          statusCode: 200,
+          message: 'Project retrieve successfully',
+          data: projects
+        };
+        res.json(response);
+      } else {
+        const response: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Project not found',
+        };
+        res.json(response);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  }
 }
 
 export const projectController = new ProjectController(db, projectValidation);
@@ -302,5 +343,7 @@ export const projectController = new ProjectController(db, projectValidation);
 
 // recent project api.
 // always return current month.
+
+// Need to create all user retrieve functionality this api accessible for admin & coordinator both.
 
 

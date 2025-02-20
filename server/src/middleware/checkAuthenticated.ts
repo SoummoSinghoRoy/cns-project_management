@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { CustomRequest } from "../types/request.type";
 import { jwt_token } from "../config/jwt.config";
 import { AuthenticationResponse } from "../types/response.type";
+import { EmployeeType, Role } from "../types/model.type";
 
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction): void => {
   const customReq = req as CustomRequest;
@@ -58,7 +59,7 @@ export const isNotAuthenticated = (req: Request, res: Response, next: NextFuncti
 export const isAdmin = (req: Request, res: Response, next: NextFunction): void => {
   const request = req as CustomRequest;
 
-  if(request.user?.role === 'admin') {
+  if(request.user?.role === Role.Admin) {
     next()
   } else {
     const response: AuthenticationResponse = {
@@ -73,7 +74,22 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction): void =
 export const isCoordinator = (req: Request, res: Response, next: NextFunction): void => {
   const request = req as CustomRequest;
 
-  if(request.user?.role === 'employee' && request.user?.employeeType === 'coordinator') {
+  if(request.user?.role === Role.Employee && request.user?.employeeType === EmployeeType.Coordinator) {
+    next()
+  } else {
+    const response: AuthenticationResponse = {
+      success: false,
+      statusCode: 403,
+      message: 'Unauthorized access.'
+    }
+    res.json(response);
+  }
+}
+
+export const isAssistant = (req: Request, res: Response, next: NextFunction): void => {
+  const request = req as CustomRequest;
+
+  if(request.user?.role === Role.Employee && request.user?.employeeType === EmployeeType.Assistant) {
     next()
   } else {
     const response: AuthenticationResponse = {
