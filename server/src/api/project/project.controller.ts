@@ -645,7 +645,7 @@ class ProjectController {
           res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
           document.pipe(res);
 
-          document.fontSize(18).text('Project Report', { align: 'center' });
+          document.fontSize(16).text('Project Report', { align: 'center' });
           document.moveDown();
 
           const tableData = allProject.map((project: any) => ({
@@ -672,8 +672,8 @@ class ProjectController {
           };
 
           await document.table(table, {
-            prepareHeader: () => document.font('Helvetica-Bold').fontSize(14),
-            prepareRow: () => document.font('Helvetica').fontSize(14),
+            prepareHeader: () => document.font('Helvetica-Bold').fontSize(12),
+            prepareRow: () => document.font('Helvetica').fontSize(11),
           });
           document.end()
         } else {
