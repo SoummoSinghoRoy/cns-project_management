@@ -562,6 +562,20 @@ class ProjectController {
       res.json(response);
     }
   };
+
+  generateProjectReport = async (req: Request, res: Response): Promise<void> => {
+    try {
+      
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  }
 }
 
 export const projectController = new ProjectController(db, projectValidation);
@@ -570,8 +584,6 @@ export const projectController = new ProjectController(db, projectValidation);
 // 1. write a query based on month & year.
 // 2. then generate pdf.
 
-// recent project api.
-// always return current month.
 
 // Need to create all user retrieve functionality this api accessible for admin & coordinator both.
 
