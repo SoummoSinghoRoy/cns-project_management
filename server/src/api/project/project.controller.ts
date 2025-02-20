@@ -4,7 +4,7 @@ import { projectValidation } from "./project.validation";
 import { BasicApiResponse, ProjectApiResponse } from "../../types/response.type";
 import { WorkStatus, Status } from "../../types/model.type";
 import { Op } from "sequelize";
-import PDFDocument from 'pdfkit';
+import PDFDocument from 'pdfkit-table';
 
 class ProjectController {
   private database: typeof db;
@@ -639,35 +639,43 @@ class ProjectController {
         });
 
         if (allProject.length !== 0) {
-          const document = new PDFDocument({size: "A4"});
+          const document = new PDFDocument({size: "A4", layout: "landscape"});
           const filename = `report-${Date.now()}.pdf`;
           res.setHeader('Content-Type', 'application/pdf');
           res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
           document.pipe(res);
 
-          document.fontSize(25).text('Project Report', { align: 'center' });
+          document.fontSize(18).text('Project Report', { align: 'center' });
           document.moveDown();
 
-          allProject.forEach((project: any) => {
-            document.fontSize(14).text(`Id: ${project.id}`);
-            document.fontSize(14).text(`Project Name: ${project.name}`);
-            document.text(`Introduction: ${project.intro}`);
-            document.text(`Owner: ${project.owner.username}`);
-            document.text(`Status: ${project.status}`);
-            document.text(`Start Date: ${project.startDateTime}`);
-            document.text(`End Date: ${project.endDateTime}`);
-            document.moveDown();
+          const tableData = allProject.map((project: any) => ({
+            id: project.id,
+            name: project.name,
+            owner: project.owner.username,
+            status: project.status,
+            startDate: project.startDateTime,
+            endDate: project.endDateTime,
+            teamMembers: project.teamMembers.map((member: any) => member.username).join(', ')
+          }));
+          
+          const table = {
+            headers: [
+              { label: "ID", width: 20, align: "center" },
+              { label: "Project Name", width: 160, align: "center" },
+              { label: "Owner", width: 80, align: "center" },
+              { label: "Status", width: 50, align: "center" },
+              { label: "Start Date", width: 80, align: "center" },
+              { label: "End Date", width: 80, align: "center" },
+              { label: "Team Members", width: 160, align: "center" }
+            ],
+            rows: tableData.map((row: any) => [row.id, row.name, row.owner, row.status, row.startDate, row.endDate, row.teamMembers]),
+          };
 
-            document.text('Team Members:');
-            project.teamMembers.forEach((member: any) => {
-              document.text(`Name: ${member.username}`);
-              document.text(`Work Status: ${member.work_status}`);
-            });
-
-            document.moveDown();
-            document.moveDown();
+          await document.table(table, {
+            prepareHeader: () => document.font('Helvetica-Bold').fontSize(14),
+            prepareRow: () => document.font('Helvetica').fontSize(14),
           });
-          document.end();
+          document.end()
         } else {
           const response: BasicApiResponse = {
             success: false,
@@ -690,10 +698,6 @@ class ProjectController {
 }
 
 export const projectController = new ProjectController(db, projectValidation);
-
-// pdf generate
-// 1. write a query based on month & year.
-// 2. then generate pdf.
 
 
 // Need to create all user retrieve functionality this api accessible for admin & coordinator both.
