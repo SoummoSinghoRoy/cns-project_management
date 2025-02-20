@@ -37,5 +37,15 @@ db.user.belongsToMany(db.project, {
   foreignKey: "employeeId",
 });
 
+db.projectTeamMember.belongsTo(db.project, {
+  foreignKey: "projectId",
+  as: "project",
+});
+
+db.projectTeamMember.belongsTo(db.user, {
+  foreignKey: "employeeId",
+  as: "employee",
+});
+
 
 export default db;

@@ -3,6 +3,7 @@ import db from "../../config/db.config";
 import { projectValidation } from "./project.validation";
 import { BasicApiResponse, ProjectApiResponse } from "../../types/response.type";
 import { WorkStatus, Status } from "../../types/model.type";
+import { Op } from "sequelize";
 
 class ProjectController {
   private database: typeof db;
@@ -289,23 +290,19 @@ class ProjectController {
     }
   };
 
-  assistantProjectRetrieveController = async (req: Request, res: Response): Promise<void> => {
+  recentProjectRetrieveController = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { employeeId } = req.params;
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
       const projects = await this.database.project.findAll({
-        include: [
-          {
-              model: this.database.user,
-              as: "owner",
-              attributes: ["id", "username", "role", "employee_type"]
+        where: {
+          createdAt: {
+            [Op.between]: [startOfMonth, endOfMonth],
           },
-          {
-              model: this.database.user,
-              as: "teamMembers",
-              where: { id: employeeId }
-          },
-        ],
-      })
+        },
+        include: ["owner", "teamMembers"]
+      });
       
       if(projects.length !== 0) {
         const response: ProjectApiResponse = {
@@ -332,13 +329,245 @@ class ProjectController {
       };
       res.json(response);
     }
-  }
+  };
+
+  assistantProjectRetrieveController = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { assistantId } = req.params;
+      const validAssistant = await this.database.user.findByPk(+assistantId);
+
+      if(validAssistant) {
+        const projects = await this.database.project.findAll({
+          include: [
+            {
+                model: this.database.user,
+                as: "owner",
+                attributes: ["id", "username", "role", "employee_type"]
+            },
+            {
+                model: this.database.user,
+                as: "teamMembers",
+                where: { id: validAssistant.id }
+            },
+          ],
+        })
+        
+        if(projects.length !== 0) {
+          const response: ProjectApiResponse = {
+            success: true,
+            statusCode: 200,
+            message: 'Project retrieve successfully',
+            data: projects
+          };
+          res.json(response);
+        } else {
+          const response: BasicApiResponse = {
+            success: false,
+            statusCode: 404,
+            message: 'Project not found',
+          };
+          res.json(response);
+        }
+      } else {
+        const response: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Assistant employee not valid',
+        };
+        res.json(response);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  };
+
+  coordinatorProjectRetrieveController = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { coordinatorId } = req.params;
+      const validCoordinator = await this.database.user.findByPk(+coordinatorId);
+
+      if(validCoordinator) {
+        const projects = await this.database.project.findAll({
+          where: {ownerId: validCoordinator.id},
+          include: [
+            {
+              model: this.database.user,
+              as: "teamMembers",
+              attributes: ["id", "username", "role", "employee_type", "work_status"]
+            },
+          ]
+        })
+        
+        if(projects.length !== 0) {
+          const response: ProjectApiResponse = {
+            success: true,
+            statusCode: 200,
+            message: 'Project retrieve successfully',
+            data: projects
+          };
+          res.json(response);
+        } else {
+          const response: BasicApiResponse = {
+            success: false,
+            statusCode: 404,
+            message: 'Project not found',
+          };
+          res.json(response);
+        }
+      } else {
+        const response: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Coordinator employee not valid',
+        };
+        res.json(response);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  };
+
+  recentProjectOfCoordinatorController = async (req:Request, res: Response): Promise<void> => {
+    try {
+      const { coordinatorId } = req.params;
+      const validCoordinator = await this.database.user.findByPk(+coordinatorId);
+
+      if(validCoordinator) {
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+        const projects = await this.database.project.findAll({
+          where: {
+            createdAt: {
+              [Op.between]: [startOfMonth, endOfMonth],
+            },
+            ownerId: validCoordinator.id
+          },
+          include: ["teamMembers"]
+        });
+
+        if(projects.length !== 0) {
+          const response: ProjectApiResponse = {
+            success: true,
+            statusCode: 200,
+            message: 'Project retrieve successfully',
+            data: projects
+          };
+          res.json(response);
+        } else {
+          const response: BasicApiResponse = {
+            success: false,
+            statusCode: 404,
+            message: 'Project not found',
+          };
+          res.json(response);
+        }
+      } else {
+        const response: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Coordinator employee not valid',
+        };
+        res.json(response);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  };
+
+  recentProjectOfAssistantController = async (req:Request, res: Response): Promise<void> => {
+    try {
+      const { assistantId } = req.params;
+      const validAssistant = await this.database.user.findByPk(+assistantId);
+
+      if(validAssistant) {
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+        const projects = await this.database.projectTeamMember.findAll({
+          where: {
+            employeeId: validAssistant.id, 
+          },
+          include: [
+            {
+              model: this.database.project,
+              as: "project",
+              where: {
+                createdAt: {
+                  [Op.between]: [startOfMonth, endOfMonth],
+                },
+              },
+              include: [
+                {
+                  model: this.database.user,
+                  as: "owner",
+                  attributes: ["id", "username", "role", "employee_type"]
+                },
+              ],
+            },
+          ],
+        });
+
+        if(projects.length !== 0) {
+          const response: ProjectApiResponse = {
+            success: true,
+            statusCode: 200,
+            message: 'Project retrieve successfully',
+            data: projects
+          };
+          res.json(response);
+        } else {
+          const response: BasicApiResponse = {
+            success: false,
+            statusCode: 404,
+            message: 'Project not found',
+          };
+          res.json(response);
+        }
+      } else {
+        const response: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Assistant employee not valid',
+        };
+        res.json(response);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  };
 }
 
 export const projectController = new ProjectController(db, projectValidation);
 
 // pdf generate
-// 1. write a query based on range of from & to.
+// 1. write a query based on month & year.
 // 2. then generate pdf.
 
 // recent project api.
