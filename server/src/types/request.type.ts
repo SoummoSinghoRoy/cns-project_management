@@ -34,3 +34,8 @@ export interface ProjectAddRequestBody extends ProjectRequestBody {
 }
 
 export type ProjectUpdateRequestBody = Pick<ProjectAddRequestBody, 'status'>;
+
+export interface ReportGenerateRequestField {
+  from: string;
+  to: string;
+}

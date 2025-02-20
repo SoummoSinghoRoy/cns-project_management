@@ -4,6 +4,7 @@ import { projectValidation } from "./project.validation";
 import { BasicApiResponse, ProjectApiResponse } from "../../types/response.type";
 import { WorkStatus, Status } from "../../types/model.type";
 import { Op } from "sequelize";
+import PDFDocument from 'pdfkit';
 
 class ProjectController {
   private database: typeof db;
@@ -48,8 +49,16 @@ class ProjectController {
         const projectdata = await this.database.project.findOne({
           where: { id: project.id },
           include: [
-            { association: "owner" },
-            { association: "teamMembers" },
+            {
+              model: this.database.user,
+              as: "owner",
+              attributes: ["id", "username"]
+            },
+            {
+              model: this.database.user,
+              as: "teamMembers",
+              attributes: ["id", "username"]
+            },
           ],
         });
 
@@ -595,7 +604,79 @@ class ProjectController {
 
   generateProjectReport = async (req: Request, res: Response): Promise<void> => {
     try {
-      
+      const { from, to } = req.body;
+      const validationResult = this.reqValidation.reportGenerateValidation({from, to});
+
+      if(!validationResult.isValid) {
+        const validationresult: BasicApiResponse = {
+          success: false,
+          statusCode: 400,
+          message: 'Validation error occurred',
+          error: {
+            message: validationResult.error,
+          },
+        };
+        res.json(validationresult);
+      } else {
+        const allProject = await this.database.project.findAll({
+          where: {
+            startDateTime: {
+              [Op.between]: [from, to]
+            }
+          },
+          include: [
+            {
+              model: this.database.user,
+              as: "owner",
+              attributes: ["username", "employee_type"]
+            },
+            {
+              model: this.database.user,
+              as: "teamMembers",
+              attribute: ["username", "employee_type", "work_status"]
+            }
+          ] 
+        });
+
+        if (allProject.length !== 0) {
+          const document = new PDFDocument({size: "A4"});
+          const filename = `report-${Date.now()}.pdf`;
+          res.setHeader('Content-Type', 'application/pdf');
+          res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+          document.pipe(res);
+
+          document.fontSize(25).text('Project Report', { align: 'center' });
+          document.moveDown();
+
+          allProject.forEach((project: any) => {
+            document.fontSize(14).text(`Id: ${project.id}`);
+            document.fontSize(14).text(`Project Name: ${project.name}`);
+            document.text(`Introduction: ${project.intro}`);
+            document.text(`Owner: ${project.owner.username}`);
+            document.text(`Status: ${project.status}`);
+            document.text(`Start Date: ${project.startDateTime}`);
+            document.text(`End Date: ${project.endDateTime}`);
+            document.moveDown();
+
+            document.text('Team Members:');
+            project.teamMembers.forEach((member: any) => {
+              document.text(`Name: ${member.username}`);
+              document.text(`Work Status: ${member.work_status}`);
+            });
+
+            document.moveDown();
+            document.moveDown();
+          });
+          document.end();
+        } else {
+          const response: BasicApiResponse = {
+            success: false,
+            statusCode: 404,
+            message: 'Projects not found',
+          };
+          res.json(response);
+        }
+      }
     } catch (error) {
       console.log(error);
       const response: BasicApiResponse = {

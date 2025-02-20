@@ -1,5 +1,5 @@
 import db from "../../config/db.config";
-import { ProjectAddRequestBody, ProjectRequestBody, ProjectUpdateRequestBody } from "../../types/request.type";
+import { ProjectAddRequestBody, ProjectRequestBody, ProjectUpdateRequestBody, ReportGenerateRequestField } from "../../types/request.type";
 import { ValidationResult } from "../../types/validation.type";
 
 class ProjectValidation {
@@ -83,6 +83,21 @@ class ProjectValidation {
     if(!reqField.status) {
       this.errorResult.status = `Status is required`
     }
+    return {
+      error: this.errorResult,
+      isValid: Object.keys(this.errorResult).length === 0
+    }
+  };
+
+  reportGenerateValidation(reqField: ReportGenerateRequestField): ValidationResult {
+    if(!reqField.from) {
+      this.errorResult.from = `Date is required`
+    }
+
+    if(!reqField.to) {
+      this.errorResult.to = `Date is required`
+    }
+    
     return {
       error: this.errorResult,
       isValid: Object.keys(this.errorResult).length === 0

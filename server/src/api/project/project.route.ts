@@ -14,5 +14,6 @@ router.get('/all/assistant/:assistantId', isAuthenticated, isAssistant, projectC
 router.get('/all/coordinator/:coordinatorId', isAuthenticated, isCoordinator, projectController.coordinatorProjectRetrieveController);
 router.get('/recent/coordinator/:coordinatorId', isAuthenticated, isCoordinator, projectController.recentProjectOfCoordinatorController);
 router.get('/recent/assistant/:assistantId', isAuthenticated, isAssistant, projectController.recentProjectOfAssistantController);
+router.post('/generate-report', isAuthenticated, isAdmin, projectController.generateProjectReport);
 
 export default router;
