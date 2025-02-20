@@ -258,26 +258,56 @@ class ProjectController {
 
   projectRetrieveController = async (req: Request, res: Response): Promise<void> => {
     try {
-      const allProject = await this.database.project.findAll({
-        include: ["owner", "teamMembers"],
-        order: [["createdAt", "DESC"]] 
-      })
+      const { from, to } = req.query;
       
-      if(allProject.length !== 0) {
-        const response: ProjectApiResponse = {
-          success: true,
-          statusCode: 200,
-          message: 'Project retrieve successfully',
-          data: allProject
-        };
-      res.json(response);
+      if(from && to) {
+        const allProject = await this.database.project.findAll({
+          where: {
+            startDateTime: {
+              [Op.between]: [from, to]
+            }
+          },
+          include: ["owner", "teamMembers"] 
+        })
+
+        if(allProject.length !== 0) {
+          const response: ProjectApiResponse = {
+            success: true,
+            statusCode: 200,
+            message: 'Project retrieve successfully',
+            data: allProject
+          };
+        res.json(response);
+        } else {
+          const response: BasicApiResponse = {
+            success: false,
+            statusCode: 404,
+            message: 'Project not found in your desired date range',
+          };
+        res.json(response);
+        }
       } else {
-        const response: BasicApiResponse = {
-          success: false,
-          statusCode: 404,
-          message: 'Project not found',
-        };
-      res.json(response);
+        const allProject = await this.database.project.findAll({
+          include: ["owner", "teamMembers"],
+          order: [["createdAt", "DESC"]] 
+        })
+
+        if(allProject.length !== 0) {
+          const response: ProjectApiResponse = {
+            success: true,
+            statusCode: 200,
+            message: 'Project retrieve successfully',
+            data: allProject
+          };
+        res.json(response);
+        } else {
+          const response: BasicApiResponse = {
+            success: false,
+            statusCode: 404,
+            message: 'Project not found',
+          };
+        res.json(response);
+        }
       }
     } catch (error) {
       console.log(error);
