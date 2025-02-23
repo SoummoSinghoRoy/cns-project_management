@@ -11,6 +11,8 @@ interface UserData {
   id?: any;
   username?: string;
   role?: string;
+  designation?: string;
+  department?: string;
   employeeType?: string;
   workStatus?: string;
 }

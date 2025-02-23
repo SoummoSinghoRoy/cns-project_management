@@ -4,8 +4,9 @@ import { UserRequestBody, EmployeeAddRequestBody } from '../../types/request.typ
 
 class UserValidation {
   private errorResult: { [field: string]: string; } = {}
+  private validationresult: any;
 
-  private baseValidation(reqField: UserRequestBody): BaseError {
+  async signupValidation(reqField: UserRequestBody): Promise<ValidationResult> {
     if(!reqField.username) {
       this.errorResult.username = `User name required`
     }
@@ -15,41 +16,32 @@ class UserValidation {
     } else if (!validator.isLength(reqField.password, { min: 6, max: 10 })) {
       this.errorResult.password = `Password length must be 6 to 10 charecter`
     }
+    
+    if(!reqField.designation) {
+      this.validationresult.designation = `Designation is required`
+    }
 
-    return this.errorResult
-  }
-
-  async signupValidation(reqField: UserRequestBody): Promise<ValidationResult> {
-    const validationresult = this.baseValidation(reqField);
-
-    if(Object.keys(validationresult).length !== 0) {
-      this.errorResult = {};
-      return {
-        error: validationresult,
-        isValid: Object.keys(validationresult).length === 0
-      }
-    } else {
-      return {
-        error: validationresult,
-        isValid: Object.keys(validationresult).length === 0
-      }
+    if(!reqField.department) {
+      this.errorResult.department = `Department is required`
+    }
+    return {
+      error: this.errorResult,
+      isValid: Object.keys(this.errorResult).length === 0
     }
   };
   
   async loginValidation(reqField: UserRequestBody): Promise<ValidationResult> {
-    const validationresult = this.baseValidation(reqField);
+    if(!reqField.username) {
+      this.errorResult.username = `User name required`
+    }
 
-    if(Object.keys(validationresult).length !== 0) {
-      this.errorResult = {};
-      return {
-        error: validationresult,
-        isValid: Object.keys(validationresult).length === 0
-      }
-    } else {
-      return {
-        error: validationresult,
-        isValid: Object.keys(validationresult).length === 0
-      }
+    if (!reqField.password) {
+      this.errorResult.password = `Password is required`
+    }
+
+    return {
+      error: this.errorResult,
+      isValid: Object.keys(this.errorResult).length === 0
     }
   };
 
@@ -63,6 +55,14 @@ class UserValidation {
       this.errorResult.password = `Password is required`
     } else if (!validator.isLength(reqField.password, { min: 6, max: 10 })) {
       this.errorResult.password = `Password length must be 6 to 10 charecter`
+    }
+
+    if(!reqField.designation) {
+      this.errorResult.designation = `Designation is required`
+    }
+
+    if(!reqField.department) {
+      this.errorResult.department = `Department is required`
     }
 
     if(!reqField.employee_type) {

@@ -23,8 +23,8 @@ class UserController {
 
   signupPostController = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { username, password } = req.body;
-      const validationResult = await this.reqValidation.signupValidation({ username, password });
+      const { username, password, designation, department } = req.body;
+      const validationResult = await this.reqValidation.signupValidation({ username, password, designation, department });
 
       if (!validationResult.isValid) {
         const validationresult: BasicApiResponse = {
@@ -39,7 +39,7 @@ class UserController {
       } else {
         const hash = await this.configureBcrypt.generatePassword(password)
         const registerUser = await this.database.user.create({
-          username, password: hash, role: Role.Admin, employee_type: EmployeeType.Admin, work_status: WorkStatus.Admin
+          username, password: hash, role: Role.Admin, designation: 'admin', department: 'administrative', employee_type: EmployeeType.Admin, work_status: WorkStatus.Admin
         });
         const response: UserApiResponse = {
           success: true,
@@ -49,6 +49,8 @@ class UserController {
             id: registerUser.id,
             username: registerUser.username,
             role: registerUser.role,
+            designation: registerUser.designation,
+            department: registerUser.department,
             employeeType: registerUser.employee_type,
             workStatus: registerUser.work_status
           }
@@ -159,8 +161,8 @@ class UserController {
 
   employeeAddPostController = async (req: Request, res: Response): Promise<void> => {
     try {
-      const { username, password, employee_type, work_status } = req.body;
-      const validationResult = await this.reqValidation.employeeAddValidation({ username, password, employee_type, work_status });
+      const { username, password, designation, department, employee_type, work_status } = req.body;
+      const validationResult = await this.reqValidation.employeeAddValidation({ username, password, designation, department, employee_type, work_status });
 
       if (!validationResult.isValid) {
         const validationresult: BasicApiResponse = {
@@ -175,7 +177,7 @@ class UserController {
       } else {
         const hash = await this.configureBcrypt.generatePassword(password)
         const registerUser = await this.database.user.create({
-          username, password: hash, role: Role.Employee, employee_type, work_status
+          username, password: hash, role: Role.Employee, designation, department, employee_type, work_status
         });
         const response: UserApiResponse = {
           success: true,
@@ -185,6 +187,8 @@ class UserController {
             id: registerUser.id,
             username: registerUser.username,
             role: registerUser.role,
+            designation: registerUser.designation,
+            department: registerUser.department,
             employeeType: registerUser.employee_type,
             workStatus: registerUser.work_status
           }

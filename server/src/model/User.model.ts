@@ -20,6 +20,14 @@ export default (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
       type: dataTypes.ENUM(...Object.values(Role)),
       allowNull: false
     },
+    designation: {
+      type: dataTypes.STRING,
+      allowNull: false
+    },
+    department: {
+      type: dataTypes.STRING,
+      allowNull: false
+    },
     employee_type: {
       type: dataTypes.ENUM(...Object.values(EmployeeType)),
       allowNull: false

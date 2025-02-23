@@ -3,6 +3,8 @@ import { Request } from "express";
 export interface UserRequestBody {
   username: string;
   password: string;
+  designation?: string;
+  department?: string;
 }
 
 export interface EmployeeAddRequestBody extends UserRequestBody {

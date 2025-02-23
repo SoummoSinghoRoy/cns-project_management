@@ -22,6 +22,8 @@ export interface UserAttributes {
   username: string;
   password: string;
   role: Role;
+  designation: string;
+  department: string;
   employee_type: EmployeeType;
   work_status: WorkStatus;
 }
