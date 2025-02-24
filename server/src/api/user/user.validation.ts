@@ -1,7 +1,7 @@
 import validator from 'validator';
-import { BaseError, ValidationResult } from '../../types/validation.type';
+import { ValidationResult } from '../../types/validation.type';
 import { UserRequestBody, EmployeeAddRequestBody } from '../../types/request.type';
-
+import db from '../../config/db.config';
 class UserValidation {
   private errorResult: { [field: string]: string; } = {}
   private validationresult: any;
@@ -24,6 +24,13 @@ class UserValidation {
     if(!reqField.department) {
       this.errorResult.department = `Department is required`
     }
+
+    const existUser = await db.user.findOne({where: {username: reqField.username}});
+
+    if(existUser) {
+      this.errorResult.username = `Must use unique user name`
+    }
+
     return {
       error: this.errorResult,
       isValid: Object.keys(this.errorResult).length === 0
@@ -71,6 +78,12 @@ class UserValidation {
 
     if(!reqField.work_status) {
       this.errorResult.work_status = `Work status must be available or engaged`
+    }
+
+    const existEmployee = await db.user.findOne({where: {username: reqField.username}});
+
+    if(existEmployee) {
+      this.errorResult.username = `Must use unique user name`
     }
 
     return {
