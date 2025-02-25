@@ -1,10 +1,12 @@
 import React, {useState} from "react";
 import logo from '../../asset/images/logo.png';
-import '../../asset/styles/signup.css';
+import '../../asset/styles/auth.css';
 import { signupFetcher } from "../../fetcher/auth.fetcher";
 import { Alert } from "../../components/Alert";
+import {useNavigate} from 'react-router';
 
 function Signup () {
+  const navigate = useNavigate();
   const [signupFormData, setSignupFormData] = useState({
     username: '',
     password: '',
@@ -12,8 +14,8 @@ function Signup () {
     department: ''
   });
   const [validationResult, setValidationResult] = useState({});
-  const [message, setMessage] = useState('');
   const [responseStatus, setResponseStatus] = useState(0);
+  const [message, setMessage] = useState('');
 
   const handleChange = (event) => {
     let {name, value} = event.target;
@@ -32,26 +34,26 @@ function Signup () {
       department: ''
     });
     const signupData = await signupFetcher(signupFormData);
+    
     if(signupData.data.statusCode === 200) {
-      console.log(signupData.data);
-      
+      navigate('/');
     } else {
       setMessage(signupData.data.message);
-      setValidationResult({
-        ...validationResult,
-        validationResult: signupData.data.error
-      });
-      setResponseStatus(signupData.data.statusCode)      
+      setResponseStatus(signupData.data.statusCode);
+      
+      if(signupData.data.statusCode === 400) {
+        setValidationResult(signupData.data.error);  
+      }    
     }
   };
-
+  
   return (
     <div className="container ">
       <div className="row">
-        <div className="col-3"></div>
-        <div className="col-12 col-lg-6 col-md-6">
+        <div className="col-4"></div>
+        <div className="col-12 col-lg-4 col-md-4">
           {
-            responseStatus !== 200 &&  <Alert alertStatus={responseStatus} alertMessage={message}/>
+            responseStatus !== 200 && <Alert alertStatus={responseStatus} alertMessage={message} updateMessage={setMessage} updateStatus={setResponseStatus}/>
           }
           <img 
             src={logo} 
@@ -60,7 +62,7 @@ function Signup () {
             width="160"
             height= "auto"
           />
-          <div className="card mx-lg-5 px-2 py-3 px-lg-4 px-md-4 py-lg-4 py-md-4 justify-content-center signup-card">
+          <div className="card px-2 py-3 py-lg-4 py-md-4 justify-content-center signup-card">
             <h4 className="text-center">SignUp Now</h4>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
@@ -75,6 +77,12 @@ function Signup () {
                     value={signupFormData.username}
                     autoComplete="true"
                   />
+                  {
+                    responseStatus === 400 &&
+                    <div className="invalid-feedback d-block">
+                      { validationResult.message?.username }
+                    </div>
+                  }
                 </div>
 
                 <div className="mb-3">
@@ -88,6 +96,12 @@ function Signup () {
                     value={signupFormData.password}
                     autoComplete="true"
                   />
+                  {
+                    responseStatus === 400 &&
+                    <div className="invalid-feedback d-block">
+                      { validationResult.message?.password }
+                    </div>
+                  }
                 </div>
 
                 <div className="mb-3">
@@ -101,6 +115,12 @@ function Signup () {
                     value={signupFormData.designation}
                     autoComplete="true"
                   />
+                  {
+                    responseStatus === 400 &&
+                    <div className="invalid-feedback d-block">
+                      { validationResult.message?.designation }
+                    </div>
+                  }
                 </div>
 
                 <div className="mb-3">
@@ -114,9 +134,15 @@ function Signup () {
                     value={signupFormData.department} 
                     autoComplete="true"
                   />
+                  {
+                    responseStatus === 400 &&
+                    <div className="invalid-feedback d-block">
+                      { validationResult.message?.department }
+                    </div>
+                  }
                 </div>
 
-                <p>Already have an account? <a href="#">Login</a></p>
+                <p>Already have an account? <a href="/login">Login</a></p>
                 <button type="submit" className="btn btn-outline-secondary">Sign up</button>
               </form>
             </div>
