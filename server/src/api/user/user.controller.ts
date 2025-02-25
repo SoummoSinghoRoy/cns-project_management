@@ -25,7 +25,7 @@ class UserController {
     try {
       const { username, password, designation, department } = req.body;
       const validationResult = await this.reqValidation.signupValidation({ username, password, designation, department });
-
+      
       if (!validationResult.isValid) {
         const validationresult: BasicApiResponse = {
           success: false,
@@ -39,7 +39,7 @@ class UserController {
       } else {
         const hash = await this.configureBcrypt.generatePassword(password)
         const registerUser = await this.database.user.create({
-          username, password: hash, role: Role.Admin, designation: 'admin', department: 'administrative', employee_type: EmployeeType.Admin, work_status: WorkStatus.Admin
+          username, password: hash, role: Role.Admin, designation, department, employee_type: EmployeeType.Admin, work_status: WorkStatus.Admin
         });
         const response: UserApiResponse = {
           success: true,

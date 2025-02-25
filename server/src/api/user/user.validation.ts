@@ -4,7 +4,6 @@ import { UserRequestBody, EmployeeAddRequestBody } from '../../types/request.typ
 import db from '../../config/db.config';
 class UserValidation {
   private errorResult: { [field: string]: string; } = {}
-  private validationresult: any;
 
   async signupValidation(reqField: UserRequestBody): Promise<ValidationResult> {
     if(!reqField.username) {
@@ -18,7 +17,7 @@ class UserValidation {
     }
     
     if(!reqField.designation) {
-      this.validationresult.designation = `Designation is required`
+      this.errorResult.designation = `Designation is required`
     }
 
     if(!reqField.department) {
