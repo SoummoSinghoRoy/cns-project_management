@@ -113,7 +113,7 @@ class UserController {
             const response: BasicApiResponse = {
               success: false,
               statusCode: 401,
-              message: 'Incorrect password',
+              message: 'Incorrect password'
             }
             res.json(response)
           }
