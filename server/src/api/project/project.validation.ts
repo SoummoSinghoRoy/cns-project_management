@@ -11,9 +11,12 @@ class ProjectValidation {
   }
 
   async projectAddValidation(reqField: ProjectAddRequestBody): Promise<ValidationResult> {
+    const existProject = await this.database.project.findOne({where: {name: reqField.name}})
 
     if(!reqField.name) {
       this.errorResult.name = `Project name required`
+    } else if(reqField.name && existProject) {
+      this.errorResult.name = `Project already exist`
     }
 
     if(!reqField.intro) {
@@ -42,11 +45,6 @@ class ProjectValidation {
       this.errorResult.teamMembers = `Atleast select one member`
     } else if(Array.isArray(reqField.teamMembers) && reqField.teamMembers.length > 5) {
       this.errorResult.teamMembers = `Max 5 members applicable`
-    }
-
-    const existProject = await this.database.project.findOne({where: {name: reqField.name}})
-    if(existProject) {
-      this.errorResult.name = `Project already exist`
     }
 
     return {
