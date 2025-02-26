@@ -1,35 +1,54 @@
 import React, { useState } from "react";
 import { Alert } from "../../components/Alert";
 import logo from '../../asset/images/logo.png';
+import { loginFetcher } from "../../fetcher/auth.fetcher";
+import {useNavigate} from 'react-router';
 
 export function Login() {
+  const navigate = useNavigate();
   const [loginFormData, setLoginFormData] = useState({
-    username: "",
-    password: "",
-    designation: "",
-    department: "",
+    username: '',
+    password: ''
   });
-  const [validationResult, setValidationResult] = useState({});
-  const [responseStatus, setResponseStatus] = useState(0);
-  const [message, setMessage] = useState("");
+  const [apiResponse, setApiResponse] = useState({});
+  
+    const handleChange = (event) => {
+      let {name, value} = event.target;
+      setLoginFormData({
+        ...loginFormData,
+        [name]: value
+      })
+    };
 
-  const handleChange = (event) => {}
-
-  const handleSubmit = (event) => {}
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoginFormData({
+      username: '',
+      password: ''
+    });
+    const loginResponse = await loginFetcher(loginFormData);
+    
+    if(loginResponse.data.statusCode === 200) {
+      navigate('/')
+    }else if([400, 401, 403, 404, 406].includes(loginResponse.data.statusCode)) {
+      console.log(loginResponse.data.message);
+      console.log(apiResponse);
+      
+      setApiResponse(loginResponse.data);        
+    } else if(loginResponse.data.statusCode >= 500) {
+      setApiResponse(loginResponse.data);
+    }
+  }
 
   return (
     <div className="container ">
       <div className="row">
         <div className="col-4"></div>
         <div className="col-12 col-lg-4 col-md-4">
-          {responseStatus !== 200 && (
-            <Alert
-              alertStatus={responseStatus}
-              alertMessage={message}
-              updateMessage={setMessage}
-              updateStatus={setResponseStatus}
-            />
-          )}
+          {
+            !apiResponse.success && 
+            <Alert alertStatus={apiResponse.statusCode} alertMessage={apiResponse.message} updateApiResponse={setApiResponse}/>
+          }
           <img
             src={logo}
             alt="Logo"
@@ -54,11 +73,11 @@ export function Login() {
                     value={loginFormData.username}
                     autoComplete="true"
                   />
-                  {/* {responseStatus === 400 && (
+                  {apiResponse.statusCode === 400 && (
                     <div className="invalid-feedback d-block">
-                      {validationResult.message?.username}
+                      {apiResponse.error.message?.username}
                     </div>
-                  )} */}
+                  )}
                 </div>
 
                 <div className="mb-3">
@@ -74,11 +93,11 @@ export function Login() {
                     value={loginFormData.password}
                     autoComplete="true"
                   />
-                  {/* {responseStatus === 400 && (
+                  {apiResponse.statusCode === 400 && (
                     <div className="invalid-feedback d-block">
-                      {validationResult.message?.password}
+                      {apiResponse.error.message?.password}
                     </div>
-                  )} */}
+                  )}
                 </div>
 
                 <p>

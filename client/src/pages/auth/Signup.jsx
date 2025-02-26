@@ -31,12 +31,12 @@ function Signup () {
       designation: '',
       department: ''
     });
-    const signupData = await signupFetcher(signupFormData);
+    const signupResponse= await signupFetcher(signupFormData);
     
-    if(signupData.data.statusCode === 200) {
+    if(signupResponse.data.statusCode === 200) {
       navigate('/login');
-    } else if(signupData.data.statusCode === 400) {
-      setApiResponse(signupData.data)        
+    } else if(signupResponse.data.statusCode >= 400 || signupResponse.data.statusCode === 500) {
+      setApiResponse(signupResponse.data)        
     }
   };
   
