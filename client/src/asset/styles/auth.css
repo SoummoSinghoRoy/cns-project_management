@@ -1,1 +1,7 @@
+.form-card .form-button {
+  border-color: #2596be;
+}
 
+.form-card .form-button:hover {
+  background-color: #2596be;
+}

@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import logo from '../../asset/images/logo.png';
 import '../../asset/styles/auth.css';
-import { signupFetcher } from "../../fetcher/auth.fetcher";
-import { Alert } from "../../components/Alert";
+import {signupFetcher} from "../../fetcher/auth.fetcher";
+import {Alert} from "../../components/Alert";
 import {useNavigate} from 'react-router';
 
 function Signup () {
@@ -13,9 +13,8 @@ function Signup () {
     designation: '',
     department: ''
   });
+  const [apiResponse, setApiResponse] = useState({});
   const [validationResult, setValidationResult] = useState({});
-  const [responseStatus, setResponseStatus] = useState(0);
-  const [message, setMessage] = useState('');
 
   const handleChange = (event) => {
     let {name, value} = event.target;
@@ -37,13 +36,9 @@ function Signup () {
     
     if(signupData.data.statusCode === 200) {
       navigate('/');
-    } else {
-      setMessage(signupData.data.message);
-      setResponseStatus(signupData.data.statusCode);
-      
-      if(signupData.data.statusCode === 400) {
-        setValidationResult(signupData.data.error);  
-      }    
+    } else if(signupData.data.statusCode === 400) {
+      setApiResponse(signupData.data)      
+      setValidationResult(signupData.data.error);    
     }
   };
   
@@ -53,7 +48,8 @@ function Signup () {
         <div className="col-4"></div>
         <div className="col-12 col-lg-4 col-md-4">
           {
-            responseStatus !== 200 && <Alert alertStatus={responseStatus} alertMessage={message} updateMessage={setMessage} updateStatus={setResponseStatus}/>
+            apiResponse.statusCode !== 200 && 
+            <Alert alertStatus={apiResponse.statusCode} alertMessage={apiResponse.message} updateValidationResult={setValidationResult}/>
           }
           <img 
             src={logo} 
@@ -62,7 +58,7 @@ function Signup () {
             width="160"
             height= "auto"
           />
-          <div className="card px-2 py-3 py-lg-4 py-md-4 justify-content-center signup-card">
+          <div className="card px-2 py-3 py-lg-4 py-md-4 justify-content-center form-card">
             <h4 className="text-center">SignUp Now</h4>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
@@ -78,7 +74,7 @@ function Signup () {
                     autoComplete="true"
                   />
                   {
-                    responseStatus === 400 &&
+                    apiResponse.statusCode === 400 &&
                     <div className="invalid-feedback d-block">
                       { validationResult.message?.username }
                     </div>
@@ -97,7 +93,7 @@ function Signup () {
                     autoComplete="true"
                   />
                   {
-                    responseStatus === 400 &&
+                    apiResponse.statusCode === 400 &&
                     <div className="invalid-feedback d-block">
                       { validationResult.message?.password }
                     </div>
@@ -116,7 +112,7 @@ function Signup () {
                     autoComplete="true"
                   />
                   {
-                    responseStatus === 400 &&
+                    apiResponse.statusCode === 400 &&
                     <div className="invalid-feedback d-block">
                       { validationResult.message?.designation }
                     </div>
@@ -135,7 +131,7 @@ function Signup () {
                     autoComplete="true"
                   />
                   {
-                    responseStatus === 400 &&
+                    apiResponse.statusCode === 400 &&
                     <div className="invalid-feedback d-block">
                       { validationResult.message?.department }
                     </div>
@@ -143,7 +139,7 @@ function Signup () {
                 </div>
 
                 <p>Already have an account? <a href="/login">Login</a></p>
-                <button type="submit" className="btn btn-outline-secondary">Sign up</button>
+                <button type="submit" className="btn btn-outline-secondary form-button">Sign up</button>
               </form>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import React, { useState } from "react";
 import { Alert } from "../../components/Alert";
 import logo from '../../asset/images/logo.png';
 
@@ -37,7 +37,7 @@ export function Login() {
             width="160"
             height="auto"
           />
-          <div className="card px-2 py-3 py-lg-4 py-md-4 justify-content-center login-card">
+          <div className="card px-2 py-3 py-lg-4 py-md-4 justify-content-center form-card">
             <h4 className="text-center">Login Now</h4>
             <div className="card-body">
               <form onSubmit={handleSubmit}>
@@ -84,7 +84,7 @@ export function Login() {
                 <p>
                   Don't have an account? <a href="/register">Signup</a>
                 </p>
-                <button type="submit" className="btn btn-outline-secondary">
+                <button type="submit" className="btn btn-outline-secondary form-button">
                   Login
                 </button>
               </form>
