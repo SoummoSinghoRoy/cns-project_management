@@ -14,7 +14,7 @@ export function Alert(props) {
     setAlertStatus('');
     
     if(alertStatus === 400) {
-      props.updateValidationResult({})
+      props.updateApiResponse({})
     }
   }
 

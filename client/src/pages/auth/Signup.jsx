@@ -14,7 +14,6 @@ function Signup () {
     department: ''
   });
   const [apiResponse, setApiResponse] = useState({});
-  const [validationResult, setValidationResult] = useState({});
 
   const handleChange = (event) => {
     let {name, value} = event.target;
@@ -35,10 +34,9 @@ function Signup () {
     const signupData = await signupFetcher(signupFormData);
     
     if(signupData.data.statusCode === 200) {
-      navigate('/');
+      navigate('/login');
     } else if(signupData.data.statusCode === 400) {
-      setApiResponse(signupData.data)      
-      setValidationResult(signupData.data.error);    
+      setApiResponse(signupData.data)        
     }
   };
   
@@ -48,8 +46,8 @@ function Signup () {
         <div className="col-4"></div>
         <div className="col-12 col-lg-4 col-md-4">
           {
-            apiResponse.statusCode !== 200 && 
-            <Alert alertStatus={apiResponse.statusCode} alertMessage={apiResponse.message} updateValidationResult={setValidationResult}/>
+            !apiResponse.success && 
+            <Alert alertStatus={apiResponse.statusCode} alertMessage={apiResponse.message} updateApiResponse={setApiResponse}/>
           }
           <img 
             src={logo} 
@@ -76,7 +74,7 @@ function Signup () {
                   {
                     apiResponse.statusCode === 400 &&
                     <div className="invalid-feedback d-block">
-                      { validationResult.message?.username }
+                      { apiResponse.error.message?.username }
                     </div>
                   }
                 </div>
@@ -95,7 +93,7 @@ function Signup () {
                   {
                     apiResponse.statusCode === 400 &&
                     <div className="invalid-feedback d-block">
-                      { validationResult.message?.password }
+                      { apiResponse.error.message?.password }
                     </div>
                   }
                 </div>
@@ -114,7 +112,7 @@ function Signup () {
                   {
                     apiResponse.statusCode === 400 &&
                     <div className="invalid-feedback d-block">
-                      { validationResult.message?.designation }
+                      { apiResponse.error.message?.designation }
                     </div>
                   }
                 </div>
@@ -133,7 +131,7 @@ function Signup () {
                   {
                     apiResponse.statusCode === 400 &&
                     <div className="invalid-feedback d-block">
-                      { validationResult.message?.department }
+                      { apiResponse.error.message?.department }
                     </div>
                   }
                 </div>

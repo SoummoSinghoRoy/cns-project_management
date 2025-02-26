@@ -82,7 +82,7 @@ export function Login() {
                 </div>
 
                 <p>
-                  Don't have an account? <a href="/register">Signup</a>
+                  Don't have an account? <a href="/signup">Signup</a>
                 </p>
                 <button type="submit" className="btn btn-outline-secondary form-button">
                   Login
