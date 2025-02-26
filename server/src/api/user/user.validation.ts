@@ -6,8 +6,12 @@ class UserValidation {
   private errorResult: { [field: string]: string; } = {}
 
   async signupValidation(reqField: UserRequestBody): Promise<ValidationResult> {
+    const existUser = await db.user.findOne({where: {username: reqField.username}});
+
     if(!reqField.username) {
       this.errorResult.username = `User name required`
+    } else if(reqField.username && existUser) {
+      this.errorResult.username = `User must be unique`
     }
 
     if (!reqField.password) {
@@ -22,12 +26,6 @@ class UserValidation {
 
     if(!reqField.department) {
       this.errorResult.department = `Department is required`
-    }
-
-    const existUser = await db.user.findOne({where: {username: reqField.username}});
-
-    if(existUser) {
-      this.errorResult.username = `Must use unique user name`
     }
 
     return {
@@ -52,9 +50,12 @@ class UserValidation {
   };
 
   async employeeAddValidation(reqField: EmployeeAddRequestBody): Promise<ValidationResult> {
+    const existEmployee = await db.user.findOne({where: {username: reqField.username}});
 
     if(!reqField.username) {
       this.errorResult.username = `User name required`
+    } else if(reqField.username && existEmployee) {
+      this.errorResult.username = `User must be unique`
     }
 
     if (!reqField.password) {
@@ -77,12 +78,6 @@ class UserValidation {
 
     if(!reqField.work_status) {
       this.errorResult.work_status = `Work status must be available or engaged`
-    }
-
-    const existEmployee = await db.user.findOne({where: {username: reqField.username}});
-
-    if(existEmployee) {
-      this.errorResult.username = `Must use unique user name`
     }
 
     return {
