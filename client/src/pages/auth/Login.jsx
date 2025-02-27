@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Alert } from "../../components/Alert";
 import logo from '../../asset/images/logo.png';
 import { loginFetcher } from "../../fetcher/auth.fetcher";
-import {useNavigate} from 'react-router';
+import { useNavigate } from 'react-router';
+import { useAuth } from "../../context/AuthContext";
 
 export function Login() {
+  const {login} = useAuth();
   const navigate = useNavigate();
   const [loginFormData, setLoginFormData] = useState({
     username: '',
@@ -29,10 +31,9 @@ export function Login() {
     const loginResponse = await loginFetcher(loginFormData);
     
     if(loginResponse.data.statusCode === 200) {
-      navigate('/')
+      login(loginResponse.data.token);
+      navigate('/');
     }else if([400, 401, 403, 404, 406].includes(loginResponse.data.statusCode)) {
-      console.log(loginResponse.data.message);
-      console.log(apiResponse);
       
       setApiResponse(loginResponse.data);        
     } else if(loginResponse.data.statusCode >= 500) {

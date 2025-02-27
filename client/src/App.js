@@ -2,17 +2,26 @@ import Signup from "./pages/auth/Signup";
 import {BrowserRouter, Routes, Route} from "react-router";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/auth/Login";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UnProtectedRoute from "./components/UnProtectedRoute";
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home/>} index/>
-          <Route path="signup" element={<Signup/>}/>
-          <Route path="login" element={<Login/>}/>
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="signup" element={<Signup/>}/>
+            <Route path="login" element={<Login/>}/>
+            <Route path="/" element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 }
