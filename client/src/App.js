@@ -4,13 +4,14 @@ import { Home } from "./pages/Home";
 import { Login } from "./pages/auth/Login";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-import UnProtectedRoute from "./components/UnProtectedRoute";
+import { Layout } from "./components/Layout";
 
 function App() {
   return (
     <div className="App">
       <AuthProvider>
         <BrowserRouter>
+         <Layout>
           <Routes>
             <Route path="signup" element={<Signup/>}/>
             <Route path="login" element={<Login/>}/>
@@ -20,6 +21,7 @@ function App() {
               </ProtectedRoute>
             } />
           </Routes>
+         </Layout>
         </BrowserRouter>
       </AuthProvider>
     </div>
