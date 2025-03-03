@@ -6,7 +6,7 @@ import { EmployeeType, Role } from "../types/model.type";
 
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction): void => {
   const customReq = req as CustomRequest;
-  const token = req.headers['authorization']?.replace('Bearer ', '');
+  const token = req.headers['authorization']?.replace('Bearer ', '');;
   
   if(token) {
     const verificationresult = jwt_token.jwtVerify(token);
