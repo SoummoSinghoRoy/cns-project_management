@@ -21,7 +21,7 @@ export function Alert(props) {
   if(alertStatus >= 200 && alertStatus < 300) {
     return(
       <>
-        <div className="alert alert-success alert-dismissible fade show" role="alert">
+        <div className="alert alert-success alert-dismissible fade show mt-2" role="alert">
           <strong>{alertMessage}!</strong>
           <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={clickHandler}></button>
         </div>
@@ -30,7 +30,7 @@ export function Alert(props) {
   } else if (alertStatus >= 400 && alertStatus < 500) {
     return(
       <>
-        <div className="alert alert-warning alert-dismissible fade show" role="alert">
+        <div className="alert alert-warning alert-dismissible fade show mt-2" role="alert">
           <strong>{alertMessage}!</strong>
           <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={clickHandler}></button>
         </div>
@@ -39,7 +39,7 @@ export function Alert(props) {
   } else if(alertStatus >= 500) {
     return(
       <>
-        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+        <div className="alert alert-danger alert-dismissible fade show mt-2" role="alert">
           <strong>{alertMessage}!</strong>
           <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close" onClick={clickHandler}></button>
         </div>

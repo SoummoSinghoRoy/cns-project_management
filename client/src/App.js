@@ -3,8 +3,9 @@ import {BrowserRouter, Routes, Route} from "react-router";
 import { Home } from "./pages/Home";
 import { Login } from "./pages/auth/Login";
 import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./utility/ProtectedRoute";
 import { Layout } from "./components/Layout";
+import { EmployeeRegistration } from "./pages/employee/Registration";
 
 function App() {
   return (
@@ -18,6 +19,11 @@ function App() {
             <Route path="/" element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            } />
+            <Route path="/registration" element={
+              <ProtectedRoute>
+                <EmployeeRegistration />
               </ProtectedRoute>
             } />
           </Routes>

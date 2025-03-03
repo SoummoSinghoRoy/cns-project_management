@@ -1,13 +1,14 @@
 import React, {useState} from "react";
 import logo from '../../asset/images/logo.png';
-import '../../asset/styles/auth.css';
+// import '../../asset/styles/auth.css';
 import {signupFetcher} from "../../fetcher/auth.fetcher";
 import {Alert} from "../../components/Alert";
 import {useNavigate} from 'react-router';
+import { UserForm } from "../../components/Form.user";
 
 function Signup () {
   const navigate = useNavigate();
-  const [signupFormData, setSignupFormData] = useState({
+  const [formData, setFormData] = useState({
     username: '',
     password: '',
     designation: '',
@@ -17,21 +18,21 @@ function Signup () {
 
   const handleChange = (event) => {
     let {name, value} = event.target;
-    setSignupFormData({
-      ...signupFormData,
+    setFormData({
+      ...formData,
       [name]: value
     })
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setSignupFormData({
+    setFormData({
       username: '',
       password: '',
       designation: '',
       department: ''
     });
-    const signupResponse= await signupFetcher(signupFormData);
+    const signupResponse= await signupFetcher(formData);
     
     if(signupResponse.data.statusCode === 200) {
       navigate('/login');
@@ -59,86 +60,7 @@ function Signup () {
           <div className="card px-2 py-3 py-lg-4 py-md-4 justify-content-center form-card">
             <h4 className="text-center">SignUp Now</h4>
             <div className="card-body">
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="username" className="mb-2">Username</label>
-                  <input 
-                    type="text"
-                    id="username"
-                    name="username"
-                    className="form-control"
-                    onChange={handleChange}
-                    value={signupFormData.username}
-                    autoComplete="true"
-                  />
-                  {
-                    apiResponse.statusCode === 400 &&
-                    <div className="invalid-feedback d-block">
-                      { apiResponse.error.message?.username }
-                    </div>
-                  }
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="password" className="mb-2">Password</label>
-                  <input 
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="form-control"
-                    onChange={handleChange}
-                    value={signupFormData.password}
-                    autoComplete="true"
-                  />
-                  {
-                    apiResponse.statusCode === 400 &&
-                    <div className="invalid-feedback d-block">
-                      { apiResponse.error.message?.password }
-                    </div>
-                  }
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="designation" className="mb-2">Designation</label>
-                  <input 
-                    type="text"
-                    id="designation"
-                    name="designation"
-                    className="form-control"
-                    onChange={handleChange}
-                    value={signupFormData.designation}
-                    autoComplete="true"
-                  />
-                  {
-                    apiResponse.statusCode === 400 &&
-                    <div className="invalid-feedback d-block">
-                      { apiResponse.error.message?.designation }
-                    </div>
-                  }
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="department" className="mb-2">Department</label>
-                  <input 
-                    type="text"
-                    id="department"
-                    name="department"
-                    className="form-control"
-                    onChange={handleChange}
-                    value={signupFormData.department} 
-                    autoComplete="true"
-                  />
-                  {
-                    apiResponse.statusCode === 400 &&
-                    <div className="invalid-feedback d-block">
-                      { apiResponse.error.message?.department }
-                    </div>
-                  }
-                </div>
-
-                <p>Already have an account? <a href="/login">Login</a></p>
-                <button type="submit" className="btn btn-outline-secondary form-button">Sign up</button>
-              </form>
+              <UserForm formData={formData} apiResponse={apiResponse} handleChange={handleChange} handleSubmit={handleSubmit}/>
             </div>
           </div>
         </div>

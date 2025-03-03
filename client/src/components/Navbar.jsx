@@ -33,8 +33,14 @@ export function Navbar() {
               <li className="nav-item">
                 <a className="nav-link text-warning-emphasis fw-medium nav-text" href="/project">Projects</a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link text-warning-emphasis fw-medium nav-text" href="/members">Members</a>
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle text-warning-emphasis fw-medium nav-text" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Employee
+                </a>
+                <ul className="dropdown-menu">
+                  <li><a className="dropdown-item" href="/registration">Add employee</a></li>
+                  <li><a className="dropdown-item">All employee</a></li>
+                </ul>
               </li>
             </ul>
             <div className='logout-btn ms-lg-auto'>
@@ -65,8 +71,14 @@ export function Navbar() {
                   <li className="nav-item">
                     <a className="nav-link text-warning-emphasis fw-medium nav-text" href="/project">Projects</a>
                   </li>
-                  <li className="nav-item">
-                    <a className="nav-link text-warning-emphasis fw-medium nav-text" href="/members">Members</a>
+                  <li className="nav-item dropdown">
+                    <a className="nav-link dropdown-toggle text-warning-emphasis fw-medium nav-text" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Employee
+                    </a>
+                    <ul className="dropdown-menu">
+                      <li><a className="dropdown-item" href="/registration">Add employee</a></li>
+                      <li><a className="dropdown-item">All employee</a></li>
+                    </ul>
                   </li>
                 </ul>
                 <div className='d-grid col-6 logout-btn'>
