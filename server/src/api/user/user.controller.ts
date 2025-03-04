@@ -206,6 +206,37 @@ class UserController {
     }
   };
 
+  allEmployeeGetController = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const allEmployee = await this.database.user.findAll({where: {role: Role.Employee}});
+
+      if (allEmployee.length > 0) {
+        const response: UserApiResponse = {
+          success: true,
+          statusCode: 200,
+          message: 'Found all employee',
+          data: allEmployee,
+        };
+        res.json(response);
+      } else {
+        const response: BasicApiResponse = {
+          success: false,
+          statusCode: 404,
+          message: 'Employees not found',
+        };
+        res.json(response);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  }
+
   employeeResponsiblityUpdateController = async (req: Request, res: Response): Promise<void> => {
     try {
       const { employee_type } = req.body;
@@ -244,7 +275,7 @@ class UserController {
           statusCode: 404,
           message: 'Employee not found',
         }
-        res.json(response)
+        res.json(response);
       }
       
     } catch (error) {

@@ -7,6 +7,7 @@ router.post('/register', userController.signupPostController);
 router.post('/login', userController.loginPostController);
 router.post('/logout', isAuthenticated, userController.logoutPostController);
 router.post('/employee/register', isAuthenticated, isAdmin, userController.employeeAddPostController);
+router.get('/employee/all', isAuthenticated, isAdmin, userController.allEmployeeGetController);
 router.patch('/employee/edit/type/:employeeId', isAuthenticated, isAdmin, userController.employeeResponsiblityUpdateController);
 router.get('/employee/available', isAuthenticated, isCoordinator, userController.availableTeamMembers);
 
