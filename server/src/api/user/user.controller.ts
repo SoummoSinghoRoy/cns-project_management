@@ -208,7 +208,10 @@ class UserController {
 
   allEmployeeGetController = async (req: Request, res: Response): Promise<void> => {
     try {
-      const allEmployee = await this.database.user.findAll({where: {role: Role.Employee}});
+      const allEmployee = await this.database.user.findAll({
+        where: {role: Role.Employee},
+        attributes: { exclude: ['password'] }
+      });
 
       if (allEmployee.length > 0) {
         const response: UserApiResponse = {
