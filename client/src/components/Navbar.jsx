@@ -23,7 +23,7 @@ export function Navbar() {
         {/* large & medium screen navbar */}
         <nav className="navbar navbar-expand-lg d-none d-lg-block d-md-block d-lg-flex custom-navbar">
             <a className="navbar-brand" href="/">
-              <img src={logo} alt="logo" className="img-fluid px-2" width="80" height="auto"/>
+              <img src={logo} alt="logo" className="img-fluid ps-3" width="90" height="auto"/>
             </a>
             <ul className="navbar-nav mb-2 mb-lg-0 ms-lg-auto">
               <li className="nav-item">
@@ -42,7 +42,7 @@ export function Navbar() {
                 </ul>
               </li>
             </ul>
-            <div className='logout-btn ms-lg-auto'>
+            <div className='logout-btn pe-2 ms-lg-auto'>
               <button type="button" className="btn btn-outline-secondary fw-semibold me-2" onClick={logouthandler}>logout</button>
             </div>
           </nav>
