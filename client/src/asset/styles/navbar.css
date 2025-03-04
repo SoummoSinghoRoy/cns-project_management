@@ -1,15 +1,15 @@
-.navbar-container .custom-navbar{
-  background-color: #fcd769da;
+.custom-navbar{
+  background-color: #a1d9f7;
 }
 
 .navbar-container{
-  background-color: #fcd769da;
+  background-color: #a1d9f7;
 }
 
 .navbar-container #offcanvasNavbar{
-  background-color: #fcd769da;
+  background-color: #a1d9f7;
 }
 
 .nav-text {
-  font-size: 17px;
+  font-size: 16px;
 }

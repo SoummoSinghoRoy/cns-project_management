@@ -21,8 +21,7 @@ export function Navbar() {
     return (
       <>
         {/* large & medium screen navbar */}
-        <div className='container-fluid container-lg container-md navbar-container'>
-          <nav className="navbar navbar-expand-lg d-none d-lg-block d-md-block d-lg-flex custom-navbar">
+        <nav className="navbar navbar-expand-lg d-none d-lg-block d-md-block d-lg-flex custom-navbar">
             <a className="navbar-brand" href="/">
               <img src={logo} alt="logo" className="img-fluid px-2" width="80" height="auto"/>
             </a>
@@ -38,16 +37,15 @@ export function Navbar() {
                   Employee
                 </a>
                 <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="/registration">Add employee</a></li>
-                  <li><a className="dropdown-item">All employee</a></li>
+                  <li><a className="dropdown-item" href="/employee/registration">Add employee</a></li>
+                  <li><a className="dropdown-item" href="/employee/all">All employee</a></li>
                 </ul>
               </li>
             </ul>
             <div className='logout-btn ms-lg-auto'>
-              <button type="button" className="btn btn-outline-secondary me-2" onClick={logouthandler}>logout</button>
+              <button type="button" className="btn btn-outline-secondary fw-semibold me-2" onClick={logouthandler}>logout</button>
             </div>
           </nav>
-        </div>
 
         {/* small screen navbar */}
         <nav className="navbar d-block d-lg-none d-md-none navbar-container">
@@ -76,13 +74,13 @@ export function Navbar() {
                       Employee
                     </a>
                     <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="/registration">Add employee</a></li>
+                      <li><a className="dropdown-item" href="/employee/registration">Add employee</a></li>
                       <li><a className="dropdown-item">All employee</a></li>
                     </ul>
                   </li>
                 </ul>
                 <div className='d-grid col-6 logout-btn'>
-                  <button type="button" className="btn btn-outline-secondary" onClick={logouthandler}>logout</button>
+                  <button type="button" className="btn btn-outline-secondary fw-semibold" onClick={logouthandler}>logout</button>
                 </div>
               </div>
             </div>

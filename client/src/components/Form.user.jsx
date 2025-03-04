@@ -35,6 +35,7 @@ export function UserForm(props) {
           className="form-control"
           onChange={props.handleChange}
           value={props.formData.password}
+          placeholder="Password length min 6, max 10"
           autoComplete="true"
         />
         {props.apiResponse.statusCode === 400 && (
@@ -107,7 +108,7 @@ export function UserForm(props) {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="work_status">Work status</label>
+            <label htmlFor="work_status" className="mb-2">Work status</label>
             <select 
               className="form-select" 
               name="work_status"
@@ -136,14 +137,14 @@ export function UserForm(props) {
           </p>
           <button
             type="submit"
-            className="btn btn-outline-secondary form-button"
+            className="btn btn-outline-secondary fw-semibold form-button"
           >
             Sign up
           </button>
         </> :
         <button
           type="submit"
-          className="btn btn-outline-secondary form-button"
+          className="btn btn-outline-secondary form-button fw-semibold"
         >
           Registration
         </button>
