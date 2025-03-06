@@ -1,0 +1,8 @@
+.employee_type_col .btn{
+  margin-top: -8px;
+}
+
+.employee_type_col .btn:hover {
+  background: white;
+  border-color: white;
+}
