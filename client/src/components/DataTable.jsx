@@ -5,6 +5,7 @@ import { EditModal } from './Modal';
 
 export const Table = React.memo((props) => {
   const [hoveredItemId, setHoveredItemId] = useState(null);
+  const [editEmployeeId, setEditEmployeeId] = useState(null);
   const employeeData = useMemo(() => Array.isArray(props.employees) ? props.employees : [], [props.employees]);
 
   const handleMouseEnter = (id) => {
@@ -16,7 +17,9 @@ export const Table = React.memo((props) => {
   };
 
   const handleSvgClick = (id) => {
-    console.log('Edit employee:', id);
+    if(hoveredItemId === id) {
+      setEditEmployeeId(id);
+    }
   };
 
 
@@ -80,7 +83,13 @@ export const Table = React.memo((props) => {
             }
           </tbody>
         </table>
-        <EditModal modalInputFor= 'employee'/>
+        <EditModal 
+          modalInputFor= 'employee' 
+          title='Update employee type' 
+          employeeId={editEmployeeId}
+          modalOpen={props.modalOpen}
+          modalCloseHanlder={props.modalCloseHanlder}
+        />
       </div>
     )
   } else {

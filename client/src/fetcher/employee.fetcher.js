@@ -31,3 +31,16 @@ export async function allEmployeeGetFetcher(token) {
     
   }
 }
+
+export async function updateEmployeeTypeFetcher(token, employeeId, formData) {
+  try {
+    const response = await axios.patch(`http://localhost:8080/api/v1/user/employee/edit/type/${employeeId}`, formData, {
+      headers: {
+        "authorization": token
+      },
+    })
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}

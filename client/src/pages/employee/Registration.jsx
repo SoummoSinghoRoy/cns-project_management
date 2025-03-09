@@ -48,7 +48,6 @@ export function EmployeeRegistration() {
       setApiResponse(registrationResponse.data);
     }
   };
-  console.log(apiResponse.message);
   
   return (
     <div className="row">
