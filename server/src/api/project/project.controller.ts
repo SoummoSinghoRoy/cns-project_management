@@ -286,14 +286,14 @@ class ProjectController {
             message: 'Project retrieve successfully',
             data: allProject
           };
-        res.json(response);
+          res.json(response);
         } else {
           const response: BasicApiResponse = {
             success: false,
             statusCode: 404,
             message: 'Project not found in your desired date range',
           };
-        res.json(response);
+          res.json(response);
         }
       } else {
         const allProject = await this.database.project.findAll({
