@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function employeeRegistrationFetcher(formData, token) {
   try {
-    const response = await axios.post('http://localhost:8080/api/v1/user/employee/register', formData,
+    const response = await axios.post('http://192.168.78.136:8080/api/v1/user/employee/register', formData,
       {
         headers: {
           "Content-Type": "application/json",
@@ -18,7 +18,7 @@ export async function employeeRegistrationFetcher(formData, token) {
 
 export async function allEmployeeGetFetcher(token) {
   try {
-    const response = await axios.get('http://localhost:8080/api/v1/user/employee/all',
+    const response = await axios.get('http://192.168.78.136:8080/api/v1/user/employee/all',
       {
         headers: {
           "authorization": token
@@ -34,7 +34,7 @@ export async function allEmployeeGetFetcher(token) {
 
 export async function updateEmployeeTypeFetcher(token, employeeId, formData) {
   try {
-    const response = await axios.patch(`http://localhost:8080/api/v1/user/employee/edit/type/${employeeId}`, formData, {
+    const response = await axios.patch(`http://192.168.78.136:8080/api/v1/user/employee/edit/type/${employeeId}`, formData, {
       headers: {
         "authorization": token
       },

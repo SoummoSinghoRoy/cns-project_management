@@ -3,7 +3,7 @@ import axios from "axios";
 export async function signupFetcher(formData) {
   try {
     const response = await axios.post(
-      "http://localhost:8080/api/v1/user/register", formData,
+      "http://192.168.78.136:8080/api/v1/user/register", formData,
       {
         headers: {
           "Content-Type": "application/json",
@@ -21,7 +21,7 @@ export async function signupFetcher(formData) {
 export async function loginFetcher(formData) {
   try {
     const response = await axios.post(
-      "http://localhost:8080/api/v1/user/login", formData,
+      "http://192.168.78.136:8080/api/v1/user/login", formData,
       {
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export async function logoutFetcher(token) {
   try {
     if(token) {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/user/logout",
+        "http://192.168.78.136:8080/api/v1/user/logout",
         {},
         {
           headers: {

@@ -1,12 +1,13 @@
 import React, {useMemo, useState} from 'react';
 import '../asset/styles/main.css';
-import { textCapitalize } from '../utility/custom_fn';
+import { textCapitalize } from '../utility/textCapitalize';
 import { EditModal } from './Modal';
 
 export const Table = React.memo((props) => {
   const [hoveredItemId, setHoveredItemId] = useState(null);
   const [editEmployeeId, setEditEmployeeId] = useState(null);
   const employeeData = useMemo(() => Array.isArray(props.employees) ? props.employees : [], [props.employees]);
+  const projectData = useMemo(() => Array.isArray(props.projects) ? props.projects : [], [props.projects]);
 
   const handleMouseEnter = (id) => {
     setHoveredItemId(id);
@@ -17,8 +18,12 @@ export const Table = React.memo((props) => {
   };
 
   const handleSvgClick = (id) => {
-    if(hoveredItemId === id) {
-      setEditEmployeeId(id);
+    if(props.isEmployeeTable) {
+      if(hoveredItemId === id) {
+        setEditEmployeeId(id);
+      }
+    } else if(props.isProjectTable) {
+      // this will handle project status update work
     }
   };
 
@@ -41,9 +46,9 @@ export const Table = React.memo((props) => {
           <tbody className="table-group-divider">
             {
               employeeData.length > 0 ?
-              employeeData.map((employee, id) => (
+              employeeData.map((employee, ind) => (
                 <tr key={employee.id} className="text-center">
-                  <td>{id+1}</td>
+                  <td>{ind+1}</td>
                   <td>{textCapitalize(employee.username)}</td>
                   <td>{employee.designation}</td>
                   <td>{employee.department}</td>
@@ -92,7 +97,56 @@ export const Table = React.memo((props) => {
         />
       </div>
     )
-  } else {
-    // here apply table for projects
+  } else if(props.isProjectTable) {
+    return(
+      <div className='table-responsive'>
+        <table className='table'>
+          <thead className='table-light'>
+            <tr className='text-center'>
+              <th>S/l no</th>
+              <th>Name</th>
+              <th>Intro</th>
+              <th>Owner</th>
+              <th>Status</th>
+              <th>Start date</th>
+              <th>End date</th>
+              <th>Members</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody className='table-group-divider'>
+            {
+              projectData.length !== 0 ?
+              projectData.map((project, ind) => (
+                <tr key={ind} className='text-center'>
+                  <td>{ind+1}</td>
+                  <td>{textCapitalize(project.name)}</td>
+                  <td>{textCapitalize(project.intro)}</td>
+                  <td>{textCapitalize(project.owner.username)}</td>
+                  <td>
+                    {project.status === '0' && 'Pre'}
+                    {project.status === '1' && 'Start'}
+                    {project.status === '3' && 'End'}
+                  </td>
+                  <td>{project.startDateTime}</td>
+                  <td>{project.endDateTime}</td>
+                  <td>
+                    {
+                      project.teamMembers.map((member) => textCapitalize(member.username)).join(", ")
+                    }
+                  </td>
+                  <td>
+                    action
+                  </td>
+                </tr>
+              )) :
+              <tr>
+                <td colSpan="8"><h5 className='text-center py-3'>Projects not found</h5></td>    
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    )
   }
 })

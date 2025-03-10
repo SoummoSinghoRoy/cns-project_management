@@ -7,6 +7,7 @@ import ProtectedRoute from "./utility/ProtectedRoute";
 import { Layout } from "./components/Layout";
 import { EmployeeRegistration } from "./pages/employee/Registration";
 import { AllEmployee } from "./pages/employee/AllEmployee";
+import { AllProject } from "./pages/project/AllProject";
 
 function App() {
   return (
@@ -21,6 +22,11 @@ function App() {
               <Route path="/" element={
                 <ProtectedRoute>
                   <Home />
+                </ProtectedRoute>
+              }/>
+              <Route path="/project" element={
+                <ProtectedRoute>
+                  <AllProject />
                 </ProtectedRoute>
               }/>
               <Route path="employee">

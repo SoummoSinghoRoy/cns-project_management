@@ -37,13 +37,13 @@ export function Navbar() {
             </a>
             <ul className="navbar-nav mb-2 mb-lg-0 ms-lg-auto">
               <li className="nav-item">
-                <a className="nav-link text-warning-emphasis fw-medium nav-text" aria-current="page" href="/">Home</a>
+                <a className="nav-link text-body-emphasis fw-medium nav-text" aria-current="page" href="/">Home</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link text-warning-emphasis fw-medium nav-text" href="/project">Projects</a>
+                <a className="nav-link text-body-emphasis fw-medium nav-text" href="/project">Projects</a>
               </li>
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle text-warning-emphasis fw-medium nav-text" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a className="nav-link dropdown-toggle text-body-emphasis fw-medium nav-text" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Employee
                 </a>
                 <ul className="dropdown-menu">
