@@ -12,7 +12,7 @@ export async function retrieveAllProjectFetcher(token, queryParams = {}) {
       const responseForQuery = await axios.get(url,
         {
           headers: {
-            authorization: token,
+            "authorization": token
           },
         }
       );
@@ -22,10 +22,26 @@ export async function retrieveAllProjectFetcher(token, queryParams = {}) {
     const response = await axios.get(url,
       {
         headers: {
-          authorization: token,
+          "authorization": token
         },
       }
     );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function generateReportFetcher(token, queryParams) {
+  try {
+    const response = await axios.post('http://192.168.78.136:8080/api/v1/project/generate-report', queryParams,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": token
+        },
+      }
+    )
     return response;
   } catch (error) {
     console.log(error);

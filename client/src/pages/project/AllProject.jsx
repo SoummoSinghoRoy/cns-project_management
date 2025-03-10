@@ -4,6 +4,7 @@ import { tokenDecoder } from "../../utility/token_decoded";
 import { retrieveAllProjectFetcher } from "../../fetcher/project.fetcher";
 import { Table } from "../../components/DataTable";
 import { QueryInputBox } from "../../components/QueryinputBox";
+import { ReportQueryModal } from "../../components/ReportQueryModal";
 
 export function AllProject() {
   const {authToken} = useAuth();
@@ -54,11 +55,16 @@ export function AllProject() {
               <div className="col-12 col-lg-6 col-md-6">
                 <QueryInputBox queryParams={queryParams} changeHandler={changeHandler} submitHandler={submitHandler}/>
               </div>
-              <div className="col-12 col-lg-3 col-md-3"></div>
+              <div className="col-12 col-lg-3 col-md-3">
+              <button type="button" className="btn btn-warning mt-4 float-end me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Genrate report
+              </button>
+              </div>
             </div>
             <Table isProjectTable={true} projects={allProject} modalOpen={isOpen} modalCloseHanlder={closeModalClickhanlder}/>
           </div>
         </div>
+        <ReportQueryModal />
       </div>
     )
   }
