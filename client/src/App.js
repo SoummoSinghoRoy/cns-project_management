@@ -8,6 +8,7 @@ import { Layout } from "./components/Layout";
 import { EmployeeRegistration } from "./pages/employee/Registration";
 import { AllEmployee } from "./pages/employee/AllEmployee";
 import { AllProject } from "./pages/project/AllProject";
+import UnProtectedRoute from "./utility/UnProtectedRoute";
 
 function App() {
   return (
@@ -17,8 +18,16 @@ function App() {
           <BrowserRouter>
           <Layout>
             <Routes>
-              <Route path="signup" element={<Signup/>}/>
-              <Route path="login" element={<Login/>}/>
+              <Route path="signup" element={
+                <UnProtectedRoute>
+                  <Signup/>
+                </UnProtectedRoute>
+              }/>
+              <Route path="login" element={
+                <UnProtectedRoute>
+                  <Login/>
+                </UnProtectedRoute>
+              }/>
               <Route path="/" element={
                 <ProtectedRoute>
                   <Home />
@@ -51,5 +60,3 @@ function App() {
 }
 
 export default App;
-
-{/* <div className={authToken ? `App bg-dark` : 'App'}></div> */}

@@ -31,7 +31,7 @@ export function Navbar() {
     return (
       <>
         {/* large & medium screen navbar */}
-        <nav className="navbar navbar-expand-lg d-none d-lg-block d-md-block d-lg-flex custom-navbar">
+        <nav className="navbar navbar-expand-lg d-none d-lg-block d-md-none d-lg-flex custom-navbar">
             <a className="navbar-brand" href="/">
               <img src={logo} alt="logo" className="img-fluid ps-3" width="90" height="auto"/>
             </a>
@@ -58,7 +58,7 @@ export function Navbar() {
           </nav>
 
         {/* small screen navbar */}
-        <nav className="navbar d-block d-lg-none d-md-none navbar-container">
+        <nav className="navbar d-block d-lg-none d-md-block navbar-container">
           <div className="container-fluid">
             <a className="navbar-brand" href="/">
               <img src={logo} alt="logo" className="img-fluid px-2" width="80" height="auto"/>
