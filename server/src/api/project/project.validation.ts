@@ -89,11 +89,11 @@ class ProjectValidation {
 
   reportGenerateValidation(reqField: ReportGenerateRequestField): ValidationResult {
     if(!reqField.from) {
-      this.errorResult.from = `Date is required`
+      this.errorResult.from = `From date is required`
     }
 
     if(!reqField.to) {
-      this.errorResult.to = `Date is required`
+      this.errorResult.to = `To date is required`
     }
     
     return {
