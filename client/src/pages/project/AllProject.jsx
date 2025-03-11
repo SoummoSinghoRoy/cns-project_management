@@ -49,16 +49,16 @@ export function AllProject() {
         <div className="col-12">
           <div className="card my-3"> 
             <div className="row py-3">
-              <div className="col-12 col-lg-3 col-md-3">
-                <h4 className="ps-2 py-3">All project list</h4>
+              <div className="col-6 col-lg-3 col-md-6 order-0 order-lg-1">
+                <h4 className="ps-2 py-3 py-lg-3 py-md-3">All project list</h4>
               </div>
-              <div className="col-12 col-lg-6 col-md-6">
+              <div className="col-12 col-lg-6 col-md-12 order-2 order-lg-2 mb-3 mb-lg-0 mb-md-0">
                 <QueryInputBox queryParams={queryParams} changeHandler={changeHandler} submitHandler={submitHandler}/>
               </div>
-              <div className="col-12 col-lg-3 col-md-3">
-              <button type="button" className="btn btn-warning mt-4 float-end me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Genrate report
-              </button>
+              <div className="col-6 col-lg-3 col-md-6 order-1 order-lg-3 order-md-3">
+                <button type="button" className="btn btn-warning mt-2 mt-lg-4 mt-md-4 float-end me-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Genrate report
+                </button>
               </div>
             </div>
             <Table isProjectTable={true} projects={allProject} modalOpen={isOpen} modalCloseHanlder={closeModalClickhanlder}/>

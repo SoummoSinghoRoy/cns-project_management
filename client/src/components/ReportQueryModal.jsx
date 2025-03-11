@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { QueryInputBox } from './QueryinputBox';
 import { generateReportFetcher } from '../fetcher/project.fetcher';
 import { useAuth } from '../context/AuthContext';
+import { Alert } from './Alert';
 
 export function ReportQueryModal() {
   const {authToken} = useAuth();
@@ -9,6 +10,7 @@ export function ReportQueryModal() {
     from: "",
     to: ""
   });
+  const [queryFailResponse, setQueryFailResponse] = useState({});
 
   const changeHandler = (event) => {
     setQueryParams({
@@ -19,8 +21,19 @@ export function ReportQueryModal() {
 
   const submitHandler = async (event) => {
     event.preventDefault()
+    setQueryParams({
+      from: "",
+      to: ""
+    })
     const response = await generateReportFetcher(authToken, queryParams);
-    console.log(response.data);
+    if(response.report.success) {
+      const pdfBlob = new Blob([response.report.result], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl, "_blank");
+      setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
+    } else {
+      setQueryFailResponse(response.report);
+    }
   }
 
   return(
@@ -32,8 +45,10 @@ export function ReportQueryModal() {
             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div className="modal-body">
-            <QueryInputBox queryParams={queryParams} changeHandler={changeHandler} submitHandler={submitHandler} />
+            <Alert alertStatus={queryFailResponse.statusCode} alertMessage={queryFailResponse.message} updateApiResponse={setQueryFailResponse} />
+            <QueryInputBox queryParams={queryParams} changeHandler={changeHandler} submitHandler={submitHandler} queryFailResponse={queryFailResponse} />
           </div>
+          <div className='modal-footer'></div>
         </div>
       </div>
     </div> 

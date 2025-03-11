@@ -37,12 +37,28 @@ export async function generateReportFetcher(token, queryParams) {
     const response = await axios.post('http://192.168.78.136:8080/api/v1/project/generate-report', queryParams,
       {
         headers: {
-          "Content-Type": "application/json",
-          "authorization": token
+          "authorization": token,
+          "Accept": "application/pdf",
         },
+        responseType: "arraybuffer",
       }
     )
-    return response;
+    const contentType = response.headers['content-type'];
+
+    if (contentType === 'application/pdf') {
+      return {
+        report: {
+          success: true,
+          result: response.data
+        }
+      };
+    } else {
+      const decoder = new TextDecoder('utf-8');
+      const jsonResponse = JSON.parse(decoder.decode(new Uint8Array(response.data)));
+      return {
+        report: jsonResponse
+      }
+    }
   } catch (error) {
     console.log(error);
   }
