@@ -437,6 +437,11 @@ class ProjectController {
           include: [
             {
               model: this.database.user,
+              as: 'owner',
+              attribute: ["id", "username", "role", "employee_type", "work_status"]
+            },
+            {
+              model: this.database.user,
               as: "teamMembers",
               attributes: ["id", "username", "role", "employee_type", "work_status"]
             },
@@ -495,7 +500,18 @@ class ProjectController {
             },
             ownerId: validCoordinator.id
           },
-          include: ["teamMembers"]
+          include: [
+            {
+              model: this.database.user,
+              as: 'owner',
+              attribute: ["id", "username", "role", "employee_type", "work_status"]
+            },
+            {
+              model: this.database.user,
+              as: "teamMembers",
+              attributes: ["id", "username", "role", "employee_type", "work_status"]
+            },
+          ]
         });
 
         if(projects.length !== 0) {
@@ -559,10 +575,15 @@ class ProjectController {
               include: [
                 {
                   model: this.database.user,
-                  as: "owner",
-                  attributes: ["id", "username", "role", "employee_type"]
+                  as: 'owner',
+                  attribute: ["id", "username", "role", "employee_type", "work_status"]
                 },
-              ],
+                {
+                  model: this.database.user,
+                  as: "teamMembers",
+                  attributes: ["id", "username", "role", "employee_type", "work_status"]
+                },
+              ]
             },
           ],
         });
