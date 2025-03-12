@@ -122,7 +122,9 @@ export const Table = React.memo((props) => {
                   <td>{ind+1}</td>
                   <td>{textCapitalize(project.name)}</td>
                   <td>{textCapitalize(project.intro)}</td>
-                  <td>{textCapitalize(project.owner.username)}</td>
+                  <td>
+                    { textCapitalize(project.owner.username)}
+                  </td>
                   <td>
                     {project.status === '0' && 'Pre'}
                     {project.status === '1' && 'Start'}

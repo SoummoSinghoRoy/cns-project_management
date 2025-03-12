@@ -4,7 +4,7 @@ export function QueryInputBox(props) {
   return(
     <form onSubmit={props.submitHandler}>
       <div className="input-group mt-md-3">
-        <span className="input-group-text">From and To date</span>
+        <span className="input-group-text query-input-text">From and To date</span>
         <input 
           type="date" 
           aria-label="From date" 
@@ -33,7 +33,7 @@ export function QueryInputBox(props) {
           </div>
         )}
 
-        <button className="btn btn-secondary" type="submit">View</button>
+        <button className="btn text-dark query-input-button" type="submit">View</button>
       </div>
     </form>
   )

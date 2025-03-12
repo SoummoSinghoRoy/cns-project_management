@@ -39,6 +39,7 @@ export function Navbar() {
               <li className="nav-item">
                 <a className="nav-link text-body-emphasis fw-medium nav-text" aria-current="page" href="/">Home</a>
               </li>
+              {/* here I will handle project menu based on employeeType, if admin & assistant only get projects, if coordinator get project menu with a dropdown where sub menu will be add project & all project */}
               <li className="nav-item">
                 <a className="nav-link text-body-emphasis fw-medium nav-text" href="/project">Projects</a>
               </li>
@@ -76,6 +77,7 @@ export function Navbar() {
                     <li className="nav-item">
                     <a className="nav-link text-warning-emphasis fw-medium nav-text" aria-current="page" href="/">Home</a>
                   </li>
+                  {/* here I will handle project menu based on employeeType, if admin & assistant only get projects, if coordinator get project menu with a dropdown where sub menu will be add project & all project */}
                   <li className="nav-item">
                     <a className="nav-link text-warning-emphasis fw-medium nav-text" href="/project">Projects</a>
                   </li>

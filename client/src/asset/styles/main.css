@@ -6,3 +6,15 @@
   background: white;
   border-color: white;
 }
+
+.query-input-text {
+  background-color: #dde3e7;
+}
+
+.query-input-button {
+  background-color: #dde3e7;
+}
+
+.query-input-button:hover {
+  background-color: #dde3e7;
+}

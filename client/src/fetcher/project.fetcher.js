@@ -9,6 +9,7 @@ export async function retrieveAllProjectFetcher(token, queryParams = {}) {
       params.append('from', queryParams.from);
       params.append('to', queryParams.to);
       url += `?from=${queryParams.from}&to=${queryParams.to}`;
+
       const responseForQuery = await axios.get(url,
         {
           headers: {
@@ -63,3 +64,35 @@ export async function generateReportFetcher(token, queryParams) {
     console.log(error);
   }
 }
+
+export async function retrieveCoordinatorProjectFetcher(token, coordinatorId) {
+  try {
+    const response = await axios.get(`http://192.168.78.136:8080/api/v1/project/all/coordinator/${coordinatorId}`, 
+      {
+        headers: {
+          "authorization": token
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function retrieveAssistantProjectFetcher(token, assistantId) {
+  try {
+    const response = await axios.get(`http://192.168.78.136:8080/api/v1/project/all/assistant/${assistantId}`, 
+      {
+        headers: {
+          "authorization": token
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// after lunch I will work project add feature & handle navbar item based on employeeType. 
