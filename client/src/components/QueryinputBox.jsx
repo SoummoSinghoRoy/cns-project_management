@@ -4,7 +4,6 @@ export function QueryInputBox(props) {
   return(
     <form onSubmit={props.submitHandler}>
       <div className="input-group mt-md-3">
-        <span className="input-group-text query-input-text">From and To date</span>
         <input 
           type="date" 
           aria-label="From date" 

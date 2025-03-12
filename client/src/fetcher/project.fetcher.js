@@ -95,4 +95,19 @@ export async function retrieveAssistantProjectFetcher(token, assistantId) {
   }
 }
 
+export async function retrieveAvailableTeamMember(token) {
+  try {
+    const response = await axios.get(`http://192.168.78.136:8080/api/v1/user/employee/available`, 
+      {
+        headers: {
+          "authorization": token
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // after lunch I will work project add feature & handle navbar item based on employeeType. 
