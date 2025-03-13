@@ -153,9 +153,9 @@ class ProjectController {
       });
 
       if(validProject) {
-        if(status === Status.End) {
+        if(status === Status.End || status === Status.Pre) {
           await this.database.project.update(
-            {status: Status.End},
+            {status: status},
             {where: {id: validProject.id}}
           )
           validProject.teamMembers.forEach(async (member: any) => {
