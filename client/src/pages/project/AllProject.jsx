@@ -46,7 +46,7 @@ export function AllProject() {
         setAllProject(response.data.data);
       }
     })()
-  }, [queryParams, authToken, decodeResult])
+  }, [queryParams])
 
   return(
     <div className="row px-lg-3 px-md-3">

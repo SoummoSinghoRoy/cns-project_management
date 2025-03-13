@@ -29,22 +29,19 @@ export function EditInputBox (props) {
 
   const submitHandler =  async(event) => {
     event.preventDefault();
-    setFormData({
-      employee_type: ''
-    })
+
     if(props.inputFor === 'employee') {
+      setFormData({
+        ...formData,
+        employee_type: ''
+      })
       const updateResponse = await updateEmployeeTypeFetcher(authToken, props.employeeId, formData);
-      console.log(updateResponse);
-      
-      if (updateResponse.data.statusCode === 200) {
-        setApiResponse(updateResponse.data)
-      } else if (
-        updateResponse.data.statusCode >= 400 ||
-        updateResponse.data.statusCode === 500
-      ) {
-        setApiResponse(updateResponse.data);
-      }
+      setApiResponse(updateResponse.data)
     } else if(props.inputFor === 'project') {
+      setFormData({
+        ...formData,
+        status: ''
+      })
       // it'll call project status update api.
     }
   }

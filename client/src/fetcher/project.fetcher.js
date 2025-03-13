@@ -125,3 +125,19 @@ export async function projectAddFetcher(token, formData) {
     console.log(error);
   }
 } 
+
+export async function projectStatusUpdateFetcher(token, projectId, status) {
+  try {
+    const response = await axios.patch(`http://192.168.78.136:8080/api/v1/project/update/status/${projectId}`, 
+      status,
+      {
+        headers: {
+          "authorization": token
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log(error)
+  }
+}

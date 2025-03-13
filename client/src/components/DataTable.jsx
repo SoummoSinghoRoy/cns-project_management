@@ -6,6 +6,7 @@ import { EditModal } from './Modal';
 export const Table = React.memo((props) => {
   const [hoveredItemId, setHoveredItemId] = useState(null);
   const [editEmployeeId, setEditEmployeeId] = useState(null);
+  const [editProjectStatusId, setEditProjectStatusId] = useState(null);
   const employeeData = useMemo(() => Array.isArray(props.employees) ? props.employees : [], [props.employees]);
   const projectData = useMemo(() => Array.isArray(props.projects) ? props.projects : [], [props.projects]);
 
@@ -23,7 +24,9 @@ export const Table = React.memo((props) => {
         setEditEmployeeId(id);
       }
     } else if(props.isProjectTable) {
-      // this will handle project status update work
+      if(hoveredItemId === id) {
+        setEditProjectStatusId(id);
+      }
     }
   };
 
@@ -78,7 +81,6 @@ export const Table = React.memo((props) => {
                       </button>
                     }
                   </td>
-                  {/* here also will be applied update employee type tooltips with modal */}
                   <td>{textCapitalize(employee.work_status)}</td>
                 </tr>
               )) :
@@ -126,9 +128,86 @@ export const Table = React.memo((props) => {
                     { textCapitalize(project.owner.username)}
                   </td>
                   <td>
-                    {project.status === '0' && 'Pre'}
-                    {project.status === '1' && 'Start'}
-                    {project.status === '3' && 'End'}
+                    {
+                      project.status === '0' && 
+                      <p 
+                        className='mb-0 employee_type_col'
+                        onMouseEnter={() => handleMouseEnter(project.id)}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <span>Pre</span>
+                        {
+                          hoveredItemId === project.id && 
+                          <button
+                            type="button" 
+                            className="btn btn-light"
+                            onClick={() => handleSvgClick(project.id)}
+                            style={{ cursor: 'pointer'}}
+                            data-bs-toggle="modal" 
+                            data-bs-target="#exampleModal"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                              <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            </svg>
+                          </button>
+                        }
+                      </p>
+                    }
+
+                    {
+                      project.status === '1' &&
+                      <p 
+                        className='mb-0 employee_type_col'
+                        onMouseEnter={() => handleMouseEnter(project.id)}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <span>Start</span>
+                        {
+                          hoveredItemId === project.id && 
+                          <button
+                            type="button" 
+                            className="btn btn-light"
+                            onClick={() => handleSvgClick(project.id)}
+                            style={{ cursor: 'pointer'}}
+                            data-bs-toggle="modal" 
+                            data-bs-target="#exampleModal"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                              <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            </svg>
+                          </button>
+                        }
+                      </p>
+                    }
+
+                    {
+                      project.status === '3' &&
+                      <p 
+                        className='mb-0 employee_type_col'
+                        onMouseEnter={() => handleMouseEnter(project.id)}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <span>End</span>
+                        {
+                          hoveredItemId === project.id && 
+                          <button
+                            type="button" 
+                            className="btn btn-light"
+                            onClick={() => handleSvgClick(project.id)}
+                            style={{ cursor: 'pointer'}}
+                            data-bs-toggle="modal" 
+                            data-bs-target="#exampleModal"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                              <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            </svg>
+                          </button>
+                        }
+                      </p> 
+                    }
                   </td>
                   <td>{project.startDateTime}</td>
                   <td>{project.endDateTime}</td>
@@ -148,6 +227,13 @@ export const Table = React.memo((props) => {
             }
           </tbody>
         </table>
+        <EditModal 
+          modalInputFor= 'project' 
+          title='Update project status' 
+          projectId={editProjectStatusId}
+          modalOpen={props.modalOpen}
+          modalCloseHanlder={props.modalCloseHanlder}
+        />
       </div>
     )
   }
