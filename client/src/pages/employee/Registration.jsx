@@ -39,14 +39,15 @@ export function EmployeeRegistration() {
       formData,
       authToken
     );
-    if (registrationResponse.data.statusCode === 200) {
-      setApiResponse(registrationResponse.data)
-    } else if (
-      registrationResponse.data.statusCode >= 400 ||
-      registrationResponse.data.statusCode === 500
-    ) {
-      setApiResponse(registrationResponse.data);
-    }
+    setApiResponse(registrationResponse.data);
+    // if (registrationResponse.data.statusCode === 200) {
+    //   setApiResponse(registrationResponse.data)
+    // } else if (
+    //   registrationResponse.data.statusCode >= 400 ||
+    //   registrationResponse.data.statusCode === 500
+    // ) {
+    //   setApiResponse(registrationResponse.data);
+    // }
   };
   
   return (

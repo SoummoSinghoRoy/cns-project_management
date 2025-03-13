@@ -110,4 +110,18 @@ export async function retrieveAvailableTeamMember(token) {
   }
 }
 
-// after lunch I will work project add feature & handle navbar item based on employeeType. 
+export async function projectAddFetcher(token, formData) {
+  try {
+    const response = await axios.post(`http://192.168.78.136:8080/api/v1/project/add`, formData,
+      {
+        headers: {
+          "Content-Type": "application/json", 
+          "authorization": token
+        }
+      }
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+} 

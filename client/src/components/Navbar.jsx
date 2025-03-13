@@ -94,7 +94,6 @@ export function Navbar() {
                     <li className="nav-item">
                     <Link className="nav-link text-warning-emphasis fw-medium nav-text" aria-current="page" to="/">Home</Link>
                   </li>
-                  {/* here I will handle project menu based on employeeType, if admin & assistant only get projects, if coordinator get project menu with a dropdown where sub menu will be add project & all project */}
                   {
                     decodeResult.employeeType === 'coordinator' ?
                     <li className="nav-item dropdown">

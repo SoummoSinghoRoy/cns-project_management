@@ -3,6 +3,7 @@ import { Alert } from '../../components/Alert';
 import { useAuth } from '../../context/AuthContext';
 import { tokenDecoder } from '../../utility/token_decoded';
 import { ProjectForm } from '../../components/Form.project';
+import { projectAddFetcher } from '../../fetcher/project.fetcher';
 
 export function AddProject() {
   const {authToken} = useAuth();
@@ -16,10 +17,41 @@ export function AddProject() {
     status: "",
     teamMembers: []
   });
+  const [selectedMembers, setSelectedMembers] = useState([]);
+
   const [apiResponse, setApiResponse] = useState({});
 
-  const handleChange = (event) => {}
-  const handleSubmit = (event) => {}
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value
+    })
+  }
+
+  const handleSelect= (selectedOptions) => {
+    const membersId = selectedOptions.map(member => member.value);
+
+    setSelectedMembers(selectedOptions);
+    setFormData({
+      ...formData,
+      teamMembers: membersId
+    })
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setFormData({
+      name: "",
+      intro: "",
+      startDateTime: "",
+      endDateTime: "",
+      ownerId: decodeResult.id,
+      status: "",
+      teamMembers: []
+    })
+    const response = await projectAddFetcher(authToken, formData);
+    setApiResponse(response.data)
+  }
 
   return(
     <div className="row">
@@ -37,10 +69,12 @@ export function AddProject() {
           <div className="card-body">
             <ProjectForm
               isProjectAddFrom={true} 
-              formData={formData} 
+              formData={formData}
+              selectedMembers= {selectedMembers} 
               apiResponse={apiResponse} 
               handleChange={handleChange} 
               handleSubmit={handleSubmit}
+              handleSelect={handleSelect}
             />
           </div>
         </div>
