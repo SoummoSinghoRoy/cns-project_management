@@ -144,6 +144,7 @@ class ProjectController {
     try {
       const { status } = req.body;
       const { projectId } = req.params;
+      
       const validProject = await this.database.project.findByPk(+projectId, {
         include: [
           {
@@ -153,7 +154,7 @@ class ProjectController {
       });
 
       if(validProject) {
-        if(status === Status.End || status === Status.Pre) {
+        if(status === Status.End || status === Status.Pre || status === Status.Start) {
           await this.database.project.update(
             {status: status},
             {where: {id: validProject.id}}
