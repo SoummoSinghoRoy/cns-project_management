@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { useAuth } from "../context/AuthContext";
 import { updateEmployeeTypeFetcher } from "../fetcher/employee.fetcher";
 import { Alert } from "./Alert";
+import { projectStatusUpdateFetcher } from "../fetcher/project.fetcher";
 
 export function EditInputBox (props) {
   const { authToken } = useAuth();
@@ -42,7 +43,8 @@ export function EditInputBox (props) {
         ...formData,
         status: ''
       })
-      // it'll call project status update api.
+      const updateResponse = await projectStatusUpdateFetcher(authToken, props.projectId, formData);
+      setApiResponse(updateResponse.data)
     }
   }
 
@@ -76,16 +78,24 @@ export function EditInputBox (props) {
   } else if(props.inputFor === 'project') {
     return(
       <>
+        {Object.keys(apiResponse).length !== 0 && (
+          <Alert
+            alertStatus={apiResponse.statusCode}
+            alertMessage={apiResponse.message}
+            updateApiResponse={setApiResponse}
+          />
+        )}
         <form onSubmit={submitHandler} className="py-3">
-          <div Name="input-group mb-3">
+          <div className="input-group mb-3">
             <select 
               className="form-select"
               name="status"
               value={formData.status}
               onChange={changeHandler}
             >
-              <option>Select one.....</option>
+              <option>Select one....</option>
               <option value="0">Pre</option>
+              <option value="1">Start</option>
               <option value="3">End</option>
             </select>
             <button className="btn btn-outline-secondary" type="submit" id="button-addon2">Update</button>

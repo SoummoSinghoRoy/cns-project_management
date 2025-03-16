@@ -5,8 +5,6 @@ import { EditModal } from './Modal';
 
 export const Table = React.memo((props) => {
   const [hoveredItemId, setHoveredItemId] = useState(null);
-  const [editEmployeeId, setEditEmployeeId] = useState(null);
-  const [editProjectStatusId, setEditProjectStatusId] = useState(null);
   const employeeData = useMemo(() => Array.isArray(props.employees) ? props.employees : [], [props.employees]);
   const projectData = useMemo(() => Array.isArray(props.projects) ? props.projects : [], [props.projects]);
 
@@ -21,11 +19,11 @@ export const Table = React.memo((props) => {
   const handleSvgClick = (id) => {
     if(props.isEmployeeTable) {
       if(hoveredItemId === id) {
-        setEditEmployeeId(id);
+        props.updateEmployeeId(id);
       }
     } else if(props.isProjectTable) {
       if(hoveredItemId === id) {
-        setEditProjectStatusId(id);
+        props.updateProjectId(id);
       }
     }
   };
@@ -93,7 +91,7 @@ export const Table = React.memo((props) => {
         <EditModal 
           modalInputFor= 'employee' 
           title='Update employee type' 
-          employeeId={editEmployeeId}
+          employeeId={props.employeeId}
           modalOpen={props.modalOpen}
           modalCloseHanlder={props.modalCloseHanlder}
         />
@@ -230,7 +228,7 @@ export const Table = React.memo((props) => {
         <EditModal 
           modalInputFor= 'project' 
           title='Update project status' 
-          projectId={editProjectStatusId}
+          projectId={props.projectId}
           modalOpen={props.modalOpen}
           modalCloseHanlder={props.modalCloseHanlder}
         />

@@ -13,7 +13,7 @@ export function EditModal(props) {
           </div>
           <div className="modal-body">
             {props.modalInputFor === 'employee' && <EditInputBox inputFor={props.modalInputFor} modalOpen={props.modalOpen} employeeId={props.employeeId}/>}
-            {props.modalInputFor === 'project' && <EditInputBox inputFor={props.modalInputFor} modalOpen={props.modalOpen} employeeId={props.employeeId}/>}
+            {props.modalInputFor === 'project' && <EditInputBox inputFor={props.modalInputFor} modalOpen={props.modalOpen} projectId={props.projectId}/>}
           </div>
         </div>
       </div>

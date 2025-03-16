@@ -11,6 +11,7 @@ export function AllProject() {
   const decodeResult = tokenDecoder(authToken);
   const [allProject, setAllProject] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
+  const [projectId, setProjectId] = useState(null);
   const [queryParams, setQueryParams] = useState({
     from: "",
     to: ""
@@ -18,6 +19,8 @@ export function AllProject() {
 
   const closeModalClickhanlder = (event) => {
     setIsOpen(false);
+    setProjectId(null)
+
   }
 
   const changeHandler = (event) => {
@@ -46,7 +49,7 @@ export function AllProject() {
         setAllProject(response.data.data);
       }
     })()
-  }, [queryParams])
+  }, [queryParams, projectId])
 
   return(
     <div className="row px-lg-3 px-md-3">
@@ -69,7 +72,7 @@ export function AllProject() {
             </div> :
             <h4 className="text-center py-3 py-lg-3 py-md-3">All project list</h4>
           }
-          <Table isProjectTable={true} projects={allProject} modalOpen={isOpen} modalCloseHanlder={closeModalClickhanlder}/>
+          <Table isProjectTable={true} projects={allProject} updateProjectId={setProjectId} projectId={projectId} modalOpen={isOpen} modalCloseHanlder={closeModalClickhanlder}/>
         </div>
       </div>
       <ReportQueryModal />
