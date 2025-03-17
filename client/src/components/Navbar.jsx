@@ -1,13 +1,3 @@
-// navbar & page access terms:
-// admin can add emloyee or user, update employee_type
-// if user/employee type coordinator this employee can add, edit, delete project as well as get all projects page & add team members. but admin get access all projects pages.
-// if user/employee type assistant this user can get access only projects which project this user assigned.
-
-// navbar item for admin : home page, all project page, all employee & add employee
-// navbar item for coordinator: home page, all project page which project coordinating.
-// navbar item for assistant: home page, all project page which project assisting with other.
-
-
 import React from 'react';
 import "../asset/styles/navbar.css";
 import logo from '../asset/images/logo-nav.png';
@@ -34,7 +24,7 @@ export function Navbar() {
       <>
         {/* large & medium screen navbar */}
         <nav className="navbar navbar-expand-lg d-none d-lg-block d-md-none d-lg-flex custom-navbar">
-            <Link className="navbar-brand" href="/">
+            <Link className="navbar-brand" to="/">
               <img src={logo} alt="logo" className="img-fluid ps-3" width="90" height="auto"/>
             </Link>
             <ul className="navbar-nav mb-2 mb-lg-0 ms-lg-auto">

@@ -28,10 +28,10 @@ export function ProjectForm(props) {
           id="name"
           name="name"
           className="form-control"
-          value={props.formData.name}
+          value={props.formData.name || props.currentProjectData.name}
           onChange={props.handleChange}
         />
-        {props.apiResponse.statusCode === 400 && (
+        {(props.apiResponse && props.apiResponse.statusCode === 400) && (
           <div className="invalid-feedback d-block">
             {props.apiResponse.error.message?.name}
           </div>
@@ -45,10 +45,10 @@ export function ProjectForm(props) {
           id="intro"
           name="intro"
           className="form-control"
-          value={props.formData.intro}
+          value={props.formData.intro || props.currentProjectData.intro}
           onChange={props.handleChange}
         />
-        {props.apiResponse.statusCode === 400 && (
+        {(props.apiResponse && props.apiResponse.statusCode === 400) && (
           <div className="invalid-feedback d-block">
             {props.apiResponse.error.message?.intro}
           </div>
@@ -62,10 +62,10 @@ export function ProjectForm(props) {
           id="startDateTime"
           name="startDateTime"
           className="form-control"
-          value={props.formData.startDateTime}
+          value={props.formData.startDateTime || props.currentProjectData.startDateTime}
           onChange={props.handleChange}
         />
-        {props.apiResponse.statusCode === 400 && (
+        {(props.apiResponse && props.apiResponse.statusCode === 400) && (
           <div className="invalid-feedback d-block">
             {props.apiResponse.error.message?.startDateTime}
           </div>
@@ -79,10 +79,10 @@ export function ProjectForm(props) {
           id="endDateTime"
           name="endDateTime"
           className="form-control"
-          value={props.formData.endDateTime}
+          value={props.formData.endDateTime || props.currentProjectData.endDateTime}
           onChange={props.handleChange}
         />
-        {props.apiResponse.statusCode === 400 && (
+        {(props.apiResponse && props.apiResponse.statusCode === 400) && (
           <div className="invalid-feedback d-block">
             {props.apiResponse.error.message?.endDateTime}
           </div>

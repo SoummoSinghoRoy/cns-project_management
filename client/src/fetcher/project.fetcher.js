@@ -141,3 +141,16 @@ export async function projectStatusUpdateFetcher(token, projectId, status) {
     console.log(error)
   }
 }
+
+export async function singleProjectretrieveFetcher(token, projectId) {
+  try {
+    const response = await axios.get(`http://192.168.78.136:8080/api/v1/project/single/${projectId}`, {
+      headers: {
+        "authorization": token
+      }
+    })
+    return response;
+  } catch (error) {
+    console.log(error)
+  }
+}

@@ -43,7 +43,7 @@ export function Login() {
   };
 
   return (
-    <div className="row mx-2 mx-lg-0 mx-md-0 align-middle">
+    <div className="row mx-2 mx-lg-0 mx-md-0 align-items-center">
       <div className="col-lg-4 col-md-2"></div>
       <div className="col-12 col-lg-4 col-md-8 px-lg-4 px-md-4">
         {!apiResponse.success && (
@@ -60,7 +60,7 @@ export function Login() {
           width="160"
           height="auto"
         />
-        <div className="card px-2 py-3 py-lg-4 py-md-4 justify-content-center form-card">
+        <div className="card px-2 py-3 py-lg-4 py-md-4 form-card">
           <h4 className="text-center">Login Now</h4>
           <div className="card-body">
             <form onSubmit={handleSubmit}>

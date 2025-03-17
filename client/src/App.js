@@ -10,6 +10,7 @@ import { AllEmployee } from "./pages/employee/AllEmployee";
 import { AllProject } from "./pages/project/AllProject";
 import UnProtectedRoute from "./utility/UnProtectedRoute";
 import { AddProject } from "./pages/project/AddProject";
+import { EditProject } from "./pages/project/EditProject";
 
 function App() {
   return (
@@ -35,6 +36,11 @@ function App() {
                 </ProtectedRoute>
               }/>
               <Route path="project">
+                <Route path="edit/:projectId" element={
+                  <ProtectedRoute>
+                    <EditProject />
+                  </ProtectedRoute>
+                }/>
                 <Route path="add" element={
                   <ProtectedRoute>
                     <AddProject />
@@ -46,11 +52,6 @@ function App() {
                   </ProtectedRoute>
                 }/>
               </Route>
-              {/* <Route path="/project" element={
-                <ProtectedRoute>
-                  <AllProject />
-                </ProtectedRoute>
-              }/> */}
               <Route path="employee">
                 <Route path="registration" element={
                   <ProtectedRoute>

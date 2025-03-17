@@ -18,3 +18,15 @@
 .query-input-button:hover {
   background-color: #dde3e7;
 }
+
+.action-button {
+  padding: 0px 5px;
+}
+
+.action-icon-edit {
+  color: #ffc310;
+}
+
+.action-icon-delete {
+  color: #C70039;
+}

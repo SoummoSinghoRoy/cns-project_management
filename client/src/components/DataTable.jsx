@@ -2,27 +2,28 @@ import React, {useMemo, useState} from 'react';
 import '../asset/styles/main.css';
 import { textCapitalize } from '../utility/textCapitalize';
 import { EditModal } from './Modal';
+import { Button } from './Button';
 
 export const Table = React.memo((props) => {
-  const [hoveredItemId, setHoveredItemId] = useState(null);
+  const [selectedItemId, setSelecteddItemId] = useState(null);
   const employeeData = useMemo(() => Array.isArray(props.employees) ? props.employees : [], [props.employees]);
   const projectData = useMemo(() => Array.isArray(props.projects) ? props.projects : [], [props.projects]);
 
   const handleMouseEnter = (id) => {
-    setHoveredItemId(id);
+    setSelecteddItemId(id);
   };
 
   const handleMouseLeave = () => {
-    setHoveredItemId(null);
+    setSelecteddItemId(null);
   };
 
   const handleSvgClick = (id) => {
     if(props.isEmployeeTable) {
-      if(hoveredItemId === id) {
+      if(selectedItemId === id) {
         props.updateEmployeeId(id);
       }
     } else if(props.isProjectTable) {
-      if(hoveredItemId === id) {
+      if(selectedItemId === id) {
         props.updateProjectId(id);
       }
     }
@@ -63,7 +64,7 @@ export const Table = React.memo((props) => {
                       {textCapitalize(employee.employee_type)}
                     </span>
                     {
-                      hoveredItemId === employee.id && 
+                      selectedItemId === employee.id && 
                       <button
                         type="button" 
                         className="btn btn-light"
@@ -135,7 +136,7 @@ export const Table = React.memo((props) => {
                       >
                         <span>Pre</span>
                         {
-                          hoveredItemId === project.id && 
+                          selectedItemId === project.id && 
                           <button
                             type="button" 
                             className="btn btn-light"
@@ -162,7 +163,7 @@ export const Table = React.memo((props) => {
                       >
                         <span>Start</span>
                         {
-                          hoveredItemId === project.id && 
+                          selectedItemId === project.id && 
                           <button
                             type="button" 
                             className="btn btn-light"
@@ -189,7 +190,7 @@ export const Table = React.memo((props) => {
                       >
                         <span>End</span>
                         {
-                          hoveredItemId === project.id && 
+                          selectedItemId === project.id && 
                           <button
                             type="button" 
                             className="btn btn-light"
@@ -215,7 +216,10 @@ export const Table = React.memo((props) => {
                     }
                   </td>
                   <td>
-                    action
+                  <div className="d-grid gap-1 d-md-block">
+                    <Button isEditButton={true} projectId={project.id} /> 
+                    <Button isDeleteButton={true} projectId={project.id} />
+                  </div>
                   </td>
                 </tr>
               )) :
