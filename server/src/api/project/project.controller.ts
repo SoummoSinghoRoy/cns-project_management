@@ -330,6 +330,38 @@ class ProjectController {
     }
   };
 
+  singleProjectRetrieveController = async(req: Request, res: Response): Promise<void> => {
+    try {
+      const {projectId} = req.params;
+      const project = await this.database.project.findByPk(+projectId);
+
+      if(project) {
+        const response: ProjectApiResponse = {
+          success: true,
+          statusCode: 200,
+          message: 'Project retrieve successfully',
+          data: project
+        };
+        res.json(response);
+      } else {
+        const response: BasicApiResponse = {
+          success: false,
+          statusCode: 200,
+          message: 'Project not found',
+        };
+        res.json(response);
+      }
+    } catch (error) {
+      console.log(error);
+      const response: BasicApiResponse = {
+        success: false,
+        statusCode: 500,
+        message: 'Internal server error | get back soon',
+      };
+      res.json(response);
+    }
+  }
+
   recentProjectRetrieveController = async (req: Request, res: Response): Promise<void> => {
     try {
       const now = new Date();
