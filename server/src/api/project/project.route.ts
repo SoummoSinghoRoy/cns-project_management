@@ -9,7 +9,7 @@ router.patch('/edit/:projectId', isAuthenticated, isCoordinator, projectControll
 router.patch('/update/status/:projectId', isAuthenticated, isCoordinator, projectController.projectStatusUpdateController);
 router.delete('/delete/:projectId', isAuthenticated, isCoordinator, projectController.projectDeleteController);
 router.get('/', isAuthenticated, isAdmin, projectController.projectRetrieveController);
-router.get('/single/:projectId', isAuthenticated, isCoordinator) 
+router.get('/single/:projectId', isAuthenticated, isCoordinator, projectController.singleProjectRetrieveController); 
 router.get('/recent', isAuthenticated, isAdmin, projectController.recentProjectRetrieveController);
 router.get('/all/assistant/:assistantId', isAuthenticated, isAssistant, projectController.assistantProjectRetrieveController);
 router.get('/all/coordinator/:coordinatorId', isAuthenticated, isCoordinator, projectController.coordinatorProjectRetrieveController);
