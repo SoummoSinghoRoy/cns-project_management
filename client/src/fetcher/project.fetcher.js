@@ -154,3 +154,16 @@ export async function singleProjectretrieveFetcher(token, projectId) {
     console.log(error)
   }
 }
+
+export async function projectEditFetcher(token, projectId, formData) {
+  try {
+    const response = await axios.patch(`http://192.168.78.136:8080/api/v1/project/edit/${projectId}`, formData, {
+      headers: {
+        "authorization": token
+      }
+    })
+    return response
+  } catch (error) {
+    console.log(error)
+  }
+}

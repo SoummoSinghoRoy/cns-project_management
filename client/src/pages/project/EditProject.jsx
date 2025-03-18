@@ -2,13 +2,12 @@ import React, {useState, useEffect} from "react";
 import { useParams } from "react-router";
 import { ProjectForm } from "../../components/Form.project";
 import { Alert } from "../../components/Alert";
-import { singleProjectretrieveFetcher } from "../../fetcher/project.fetcher";
+import { projectEditFetcher, singleProjectretrieveFetcher } from "../../fetcher/project.fetcher";
 import { useAuth } from "../../context/AuthContext";
 
 export function EditProject() {
   const {projectId} = useParams();
   const {authToken} = useAuth();
-  const [currentProjectData, setCurrentProjectData] = useState({});
   const [formData, setFormData] = useState({
     name: '',
     intro: '',
@@ -20,9 +19,9 @@ export function EditProject() {
   useEffect(() => {
     (async () => {
       const response = await singleProjectretrieveFetcher(authToken, projectId);
-      setCurrentProjectData(response.data.data)
+      setFormData(response.data.data)
     })()
-  })
+  }, [projectId])
 
   const changeHandler = (event) => {
     setFormData({
@@ -31,7 +30,13 @@ export function EditProject() {
     })
   }
 
-  const submitHanlder = (event) => {}
+  const submitHanlder = async (event) => {
+    event.preventDefault()
+    const response = await projectEditFetcher(authToken, projectId, formData);
+    console.log(response);
+    
+    setApiResponse(response.data)
+  }
 
   // first I will fetch specifc project by projectId
   // then share recent data to the form at edit time
@@ -51,7 +56,6 @@ export function EditProject() {
           <h4 className="text-center">Edit project</h4>
           <div className="card-body">
             <ProjectForm 
-              currentProjectData={currentProjectData}
               formData= {formData} 
               handleChange={changeHandler} 
               handleSubmit={submitHanlder}

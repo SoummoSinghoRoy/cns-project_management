@@ -28,7 +28,7 @@ export function ProjectForm(props) {
           id="name"
           name="name"
           className="form-control"
-          value={props.formData.name || props.currentProjectData.name}
+          value={props.formData.name}
           onChange={props.handleChange}
         />
         {(props.apiResponse && props.apiResponse.statusCode === 400) && (
@@ -45,7 +45,7 @@ export function ProjectForm(props) {
           id="intro"
           name="intro"
           className="form-control"
-          value={props.formData.intro || props.currentProjectData.intro}
+          value={props.formData.intro}
           onChange={props.handleChange}
         />
         {(props.apiResponse && props.apiResponse.statusCode === 400) && (
@@ -62,7 +62,7 @@ export function ProjectForm(props) {
           id="startDateTime"
           name="startDateTime"
           className="form-control"
-          value={props.formData.startDateTime || props.currentProjectData.startDateTime}
+          value={props.formData.startDateTime}
           onChange={props.handleChange}
         />
         {(props.apiResponse && props.apiResponse.statusCode === 400) && (
@@ -79,7 +79,7 @@ export function ProjectForm(props) {
           id="endDateTime"
           name="endDateTime"
           className="form-control"
-          value={props.formData.endDateTime || props.currentProjectData.endDateTime}
+          value={props.formData.endDateTime}
           onChange={props.handleChange}
         />
         {(props.apiResponse && props.apiResponse.statusCode === 400) && (
