@@ -37,9 +37,6 @@ export function EditProject() {
     
     setApiResponse(response.data)
   }
-
-  // first I will fetch specifc project by projectId
-  // then share recent data to the form at edit time
   
   return(
     <div className="row">

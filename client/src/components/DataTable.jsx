@@ -1,20 +1,20 @@
 import React, {useMemo, useState} from 'react';
 import '../asset/styles/main.css';
 import { textCapitalize } from '../utility/textCapitalize';
-import { EditModal } from './Modal';
+import { EditModal } from './EditModal';
 import { Button } from './Button';
 
 export const Table = React.memo((props) => {
-  const [selectedItemId, setSelecteddItemId] = useState(null);
+  const [selectedItemId, setSelectedItemId] = useState(null);
   const employeeData = useMemo(() => Array.isArray(props.employees) ? props.employees : [], [props.employees]);
   const projectData = useMemo(() => Array.isArray(props.projects) ? props.projects : [], [props.projects]);
 
   const handleMouseEnter = (id) => {
-    setSelecteddItemId(id);
+    setSelectedItemId(id);
   };
 
   const handleMouseLeave = () => {
-    setSelecteddItemId(null);
+    setSelectedItemId(null);
   };
 
   const handleSvgClick = (id) => {
@@ -216,10 +216,10 @@ export const Table = React.memo((props) => {
                     }
                   </td>
                   <td>
-                  <div className="d-grid gap-1 d-md-block">
-                    <Button isEditButton={true} projectId={project.id} /> 
-                    <Button isDeleteButton={true} projectId={project.id} />
-                  </div>
+                    <div className="d-grid gap-1 d-md-block">
+                      <Button isEditButton={true} projectId={project.id} /> 
+                      <Button isDeleteButton={true} projectId={project.id} isProjectDeleteButton={true} deleteSvgHandler={() => handleSvgClick(project.id)}/>
+                    </div>
                   </td>
                 </tr>
               )) :
